@@ -35,7 +35,7 @@ export function moveableMarker(map, marker, coordinates) {
     );
     if (isMarkerInsidePolygon(marker, coordinates)) {
       const center = marker.getBounds().getCenter();
-      if(map.name === 'map1') {
+      if(map.name === 'listingMap') {
         LIS.id("lat").value = center.lat;
         LIS.id("lng").value = center.lng;
         LIS.id("div").value = names[where];

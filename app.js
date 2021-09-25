@@ -1,5 +1,5 @@
 
-import {APIHost, OUTLOOK, PING_LIMITER} from './consts';
+const {APIHost, OUTLOOK, PING_LIMITER} = require('./consts');
 
 const bootstrap = require('./bootstrap').ops;
 bootstrap.checkEnvironmentVariables();
@@ -189,7 +189,7 @@ passwordless.init(new NodeCacheStore());
 passwordless.addDelivery(
     function(tokenToSend, uidToSend, recipient, callback, req) {
       const host = `${APIHost[process.env.NODE_ENV]}/logged_in`;
-      const text = 'Hello!\nAccess your account here: http://' +
+      const text = 'Hello!\nAccess your account here: ' +
       host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
       logginMail(text, recipient);
     });

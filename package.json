@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node bin/www",
-    "dev:server": "node bin/www"
+    "dev:server": "node bin/www",
+    "prestart": "cd client && npm run build:client"
   },
   "dependencies": {
     "@google-cloud/storage": "^5.8.5",
@@ -17,7 +18,7 @@
     "compress-images": "^1.9.9",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
-    "connect-sqlite3": "^0.9.11",
+    "connect-sqlite3": "^0.9.12",
     "cookie-parser": "~1.4.4",
     "cron": "^1.8.2",
     "csv-parse": "^4.16.0",

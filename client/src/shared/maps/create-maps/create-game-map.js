@@ -34,7 +34,7 @@ function refresh(circles, clusters) {
 const osmUrl = "https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg";
 const osmAttrib = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 /**
- * createMap1
+ * create Game map (connected with server by sockets)
  */
 export function gameMap({ lat, lng, layerFactory, zoom }) {
   map.current = new L.Map("game-map");
