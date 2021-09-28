@@ -51,6 +51,10 @@ The purpose of this project is to let forkers implement new sections and offer t
 
 MongoDB using the official MongoDB Node Driver
 
+## Client data 
+
+Mostly Geodata or data to derive tags from are hosted temporarily [here](https://github.com/bacloud14/Classified-ads-xx-data)
+
 ## Style
 
 It is inteded to be clean, fast and paper/newspaper looking style and layout.
