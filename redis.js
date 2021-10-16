@@ -1,0 +1,12 @@
+const Redis = require('ioredis');
+
+const redis = new Redis({
+  port: process.env.REDIS_PORT,
+  host: process.env.REDIS_HOST,
+});
+
+redis.on('connect', () => {
+  console.log('Connected to redis server')
+});
+
+module.exports = redis;
