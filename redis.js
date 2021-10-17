@@ -6,7 +6,15 @@ const redis = new Redis({
 });
 
 redis.on('connect', () => {
-  console.log('Connected to redis server')
+  console.log('Connected to redis server');
+});
+
+redis.on('error', (err) => {
+  console.log('Redis error occured while connection: ', err);
+});
+
+redis.on('reconnecting', () => {
+  console.log('Reconnecting to redis server');
 });
 
 module.exports = redis;
