@@ -123,6 +123,8 @@ EMAIL_FROM={email2}
 MONGODB_URI={you can keep empty for 'local' env}
 GCLOUD_STORAGE_BUCKET={Google-cloud-storage bucket name}
 CREDS_PATH=./creds/{{Google-cloud-storage credentials file-name}}
+REDIS_PORT={REDIS_PORT || 6379}
+REDIS_HOST={REDIS_HOST || localhost}
 ```
 
 **client/.env**  
