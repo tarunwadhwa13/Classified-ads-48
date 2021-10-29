@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://0.peerjs.com wss://0.peerjs.com https://demo.httprelay.io;
+            script-src 'self' 'unsafe-inline' https://unpkg.com https://ajax.googleapis.com;
+            object-src 'self';
+            img-src 'self' data: https://img.icons8.com https://cdnjs.cloudflare.com;
+            child-src 'none';">
+
+    <meta charset='utf-8'>
+    <meta name="description" content="Share your social contacts in one card. We do not collect any data whatseoever.">
+    <meta name="keywords" content="social, media, contacts, snapchat, whatsapp, twitter, facebook">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <title>Social cards on so-c.me</title>
+    <script type="text/javascript" src="libs/stretchy.min.js" async></script>
+    <link rel="stylesheet" type='text/css' href="style/water.css">
+    <link rel='stylesheet' type='text/css' media='screen' href='style/main.css'>
+    <link rel="stylesheet" crossorigin="anonymous"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="libs/qrcode2.min.js" async></script>
+    <script type="text/javascript" src='libs/print.min.js' async></script>
+    <script type="text/javascript" src="libs/share-buttons.js" async></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="libs/jquery.ui.touch-punch.js"></script>
+    <script>
+        $(function() {
+          $( "#sortable" ).sortable({
+            placeholder: "ui-state-highlight"
+          });
+          $( "#sortable" ).disableSelection();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="particles-js" style="position:fixed;width:100%;z-index:-10;"></div>
+    <script src="libs/particles.min.js"></script>
+    <script src="libs/particles.app.js"></script>
+    <select id="lang-select" onChange="langChange(this)">
+        <option selected value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="ar">عربية</option>
+    </select>
+    <header>
+        <h1 stonejs>Social cards on so-c.me</h1>
+    </header>
+
+    <form name="so_c" method=post action=''>
+        <table cellpadding=0 cellspacing=0 width=250>
+            <tr>
+                <td>  Your name<input type="text" name="c_name" size=12 value=test> <input type=button value='Submit' onclick="post_value();">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <main>
+        <details>
+            <summary><span stonejs>Some details can't hurt!</span></summary>
+            <table id="version-info">
+                <caption>
+                    <h3 stonejs>Disclaimers</h3>
+                </caption>
+                <tbody>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/ios/50/000000/safe-browsing.png" /></th>
+                        <td class="disclaimers"><small stonejs>This website does not collect "any" data whatsoever. Try going offline and it works. If you are tech savvy, check your browser's developer console.</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/one-free.png" /></th>
+                        <td class="disclaimers"><small stonejs>It is completely free too. It does not show advertisements and will not do so in the future. You can still help me stay motivated by donating via Paypal.</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/private2.png" /></th>
+                        <td class="disclaimers"><small stonejs>You can encrypt your card with a key that you would share only with your confidants!</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/girl-running.png" /></th>
+                        <td class="disclaimers"><small stonejs>We take no responsibility for usernames or links that you claim are yours and we don't do any verification.</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
+        <hr>
+
+        <h3 stonejs>Fill in your Social Card</h3>
+
+        <p><small stonejs>All are optional except "alias" - Drag the Social Media site links into the order you want and this will be reflected on your card.</small></p>
+        <section class="contact-form">
+            <div class="input-icons">
+                <form dir="auto" action="#" class="form1" name="form1">
+                    <i class="fa fa-user icon"></i>
+                    <input class="input-field" placeholder="my-alias *" name="user" type="text" pattern=".{6,30}"
+                        title="6 to 20 characters" required>
+                    <ul id="sortable">
+                      <li>
+                        <i class="fa fa-instagram icon"></i>
+                        <input class="input-field sortable-input" placeholder="sinsta" name="instagram" type="text" pattern=".{6,30}|^$"
+                            title="6 to 20 characters">
+                      </li>
+                      <li>
+                        <i class="fa fa-youtube icon"></i>
+                        <input class="input-field sortable-input" placeholder="utoob" name="youtube" type="text" pattern=".{6,30}|^$"
+                            title="6 to 20 characters">
+                      </li>
+                      <li>
+                        <i class="fa fa-facebook icon"></i>
+                        <input class="input-field sortable-input" placeholder="wtf-acebook" name="facebook" type="text" pattern=".{6,30}|^$"
+                            title="6 to 20 characters">
+                      </li>
+                      <li>
+                        <i class="fa fa-twitter icon"></i>
+                        <input class="input-field sortable-input" placeholder="twatter" name="twitter" type="text" pattern=".{6,30}|^$"
+                            title="6 to 20 characters">
+                      </li>
+                      <li>
+                        <i class="fa fa-snapchat icon"></i>
+                        <input class="input-field sortable-input" placeholder="snatchchat" name="snapchat" type="text" pattern=".{6,30}|^$"
+                            title="6 to 20 characters">
+                      </li>
+                    </ul>
+                    <i class="fa fa-envelope icon"></i>
+                    <input class="input-field" placeholder="gemail" name="envelope" type="email" pattern=".{6,30}|^$"
+                        title="non conforming email: __@__.__">
+                    <i class="fa fa-phone icon"></i>
+                    <input class="input-field" placeholder="000-Bananaphone" name="phone" type="text" pattern="\d{10}|^$"
+                         title="non conforming phone number: 10 digits long">
+                    <i class="fa fa-key icon"></i>
+                    <input class="input-field" placeholder="password ⌥" name="password" type="text" pattern=".{4,8}"
+                        title="4 to 8 characters">
+                    <br>
+                    <button type="submit" name="submit" id="submit">Get QR code</button>
+                </form>
+                <blockquote id="required" stonejs style="color: navy;">(*): required <br>(⌥): optional</blockquote>
+            </div>
+        </section>
+        <div class="progress-container">
+            <div class="progress"></div>
+            <div class="error"></div>
+        </div>
+        <br>
+        <hr>
+        <h3 stonejs>Here's where you get your QR code and link.</h3>
+        <p><small stonejs>Just share it with your friends! On phones, you can <i>long press</i> on it then share.</small></p>
+        <br>
+        <!-- <div id="qrcode"></div> -->
+        <canvas id="qrcode"></canvas>
+        <p><small stonejs>Or share the generated link</small></p>
+        <div id="link"></div>
+        <br>
+        <hr>
+        <H3 stonejs>Help spread "so-c.me" in your circles 🙂</H3>
+        <div dir="auto" class="share-btn" data-url="https://so-c.me" data-title="Make your social card now!"
+            data-desc="Add your Facebook, Instagram, Twitter, Snapchat, ... All in one card.">
+            <a class="btn-vk" data-id="vk"><i class="fa fa-vk"></i> VK</a>
+            <a class="btn-facebook" data-id="fb"><i class="fa fa-facebook"></i> Facebook</a>
+            <a class="btn-twitter" data-id="tw"><i class="fa fa-twitter"></i> Twitter</a>
+            <a class="btn-telegram" data-id="tg"><i class="fa fa-telegram"></i> Telegram</a>
+            <a class="btn-skype" data-id="sk"><i class="fa fa-skype"></i> Skype</a>
+            <a class="btn-whatsapp" data-id="wa"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+            <a class="btn-mail" data-id="mail"><i class="fa fa-at"></i> EMail</a>
+        </div>
+    </main>
+
+    <footer>
+        <span stonejs>If you like my work 💪 You can help me stay motivated 🍓 :</span>
+        <a href='https://www.paypal.com/donate?hosted_button_id=LF4ZVKCQ6GWWW'>Paypal</a>
+        | <a href='mailto:contact@so-c.me'><span>Email</span></a>
+        <!-- | <a href='https://github.com/bacloud14/so-cards'>Contribute</a> -->
+    </footer>
+
+</body>
+<script type="text/javascript" src="libs/stonejs.min.js"></script>
+<script type="text/javascript" src="libs/stoneJSCatalog.js"></script>
+<script type="text/javascript" src="libs/XORCipher.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<!-- <script type="text/javascript" src="peerjs.min.js"></script>
+<script>
+    (function () {
+
+        var lastPeerId = null;
+        var peer = null; // Own peer object
+        var conn = null;
+
+        /**
+         * Create the Peer object for our end of the connection.
+         *
+         * Sets up callbacks that handle any events related to our
+         * peer object.
+         */
+        function initialize() {
+            // Create own peer object with connection to shared PeerJS server
+            peer = new Peer(null, {
+                debug: 2
+            });
+
+            peer.on('open', function (id) {
+                // Workaround for peer.reconnect deleting previous id
+                if (peer.id === null) {
+                    console.log('Received null id from peer open');
+                    peer.id = lastPeerId;
+                } else {
+                    lastPeerId = peer.id;
+                }
+
+                console.log('ID: ' + peer.id);
+            });
+            peer.on('connection', function (c) {
+                // Allow only a single connection
+                if (conn && conn.open) {
+                    c.on('open', function () {
+                        c.send("Already connected to another client");
+                        setTimeout(function () { c.close(); }, 500);
+                    });
+                    return;
+                }
+
+                conn = c;
+                console.log("Connected to: " + conn.peer);
+                ready();
+            });
+            peer.on('disconnected', function () {
+                console.log('Connection lost. Please reconnect');
+
+                // Workaround for peer.reconnect deleting previous id
+                peer.id = lastPeerId;
+                peer._lastServerId = lastPeerId;
+                peer.reconnect();
+            });
+            peer.on('close', function () {
+                conn = null;
+                console.log('Connection destroyed');
+            });
+            peer.on('error', function (err) {
+                console.log(err);
+                alert('' + err);
+            });
+        };
+
+        /**
+         * Triggered once a connection has been achieved.
+         * Defines callbacks to handle incoming data and connection events.
+         */
+        function ready() {
+            conn.on('data', function (data) {
+                console.log("Data recieved");
+                console.log(data)
+            });
+            conn.on('close', function () {
+                conn = null;
+            });
+        }
+
+        initialize();
+    })();
+</script> -->
+
+</html>

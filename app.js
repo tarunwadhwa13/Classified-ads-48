@@ -206,6 +206,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/so-c', express.static(path.join(__dirname, 'so-cards')));
 // const customFilter = new Filter({placeHolder: 'x'});
 
 // Process generic parameters

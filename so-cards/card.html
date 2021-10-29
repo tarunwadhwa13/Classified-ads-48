@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://0.peerjs.com wss://0.peerjs.com https://demo.httprelay.io;
+            script-src 'self' 'unsafe-inline' https://unpkg.com https://ajax.googleapis.com;
+            object-src 'self';
+            img-src 'self' data: https://img.icons8.com https://cdnjs.cloudflare.com;
+            child-src 'none';">
+
+
+    <meta charset='utf-8'>
+    <meta name="description" content="Share your social contacts in one card. We do not collect any data whatseoever.">
+    <meta name="keywords" content="social, media, contacts, snapchat, whatsapp, twitter, facebook">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <title>Social cards on so-c.me</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='style/main.css'>
+    <link rel="stylesheet" type='text/css' href="style/water.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="libs/qrcode.min.js" async></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div id="particles-js" style="position:fixed;width:100%;z-index:-10;"></div>
+    <script src="libs/particles.min.js"></script>
+    <script src="libs/particles.app.js"></script>
+
+    <select id="lang-select" onChange="langChange(this)">
+        <option selected value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="ar">عربية</option>
+    </select>
+    <header>
+        <h1 stonejs>Social cards on "so-c.me"</h1>
+    </header>
+
+    <main>
+        <details>
+            <summary><span stonejs>Some details can't hurt!</span></summary>
+            <table id="version-info">
+                <caption>
+                    <h3 stonejs>Disclaimers</h3>
+                </caption>
+                <tbody>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/ios/50/000000/safe-browsing.png" /></th>
+                        <td class="disclaimers"><small stonejs>This website does not collect "any" data whatsoever. Try going offline and it works. If you are tech savvy, check your browser's developer console.</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/one-free.png" /></th>
+                        <td class="disclaimers"><small stonejs>It is completely free too. It does not show advertisements and will not do so in the future. You can still help me stay motivated by donating via Paypal.</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/private2.png" /></th>
+                        <td class="disclaimers"><small stonejs>You can encrypt your card with a key that you would share only with your confidants!</small></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><img src="https://img.icons8.com/wired/50/000000/girl-running.png" /></th>
+                        <td class="disclaimers"><small stonejs>We take no responsibility for usernames or links that you claim are yours and we don't do any verification.</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
+        <hr>
+
+        <div class="card-heading">
+          <div>
+            <h3><span stonejs>Social Card of</span> - <span style="color:rgb(195, 0, 255);font-weight:bold" class="user"></span></h3>
+          </div>
+          <div>
+            <span stonejs>Given a password? Then...</span>
+            <button id="decrypt-button">🔑</button>
+          </div>
+        </div>
+
+        <h3>
+
+        </h3>
+
+        <section class="contact-form">
+            <div class="input-icons">
+                <form action="#" class="form1" name="form1">
+
+                </form>
+            </div>
+        </section>
+        <br>
+        <hr>
+        <a href='https://so-c.me/'><span stonejs>Make your own card</span></a>
+        <br>
+        <hr>
+        <H3 stonejs>Help spread "so-c.me" in your circles 🙂</H3>
+
+        <div dir="auto" class="share-btn" data-url="https://so-c.me" data-title="Make your social card now!"
+            data-desc="Add your Facebook, Instagram, Twitter, Snapchat, ... All in one card.">
+            <a class="btn-vk" data-id="vk"><i class="fa fa-vk"></i> VK</a>
+            <a class="btn-facebook" data-id="fb"><i class="fa fa-facebook"></i> Facebook</a>
+            <a class="btn-twitter" data-id="tw"><i class="fa fa-twitter"></i> Twitter</a>
+            <a class="btn-telegram" data-id="tg"><i class="fa fa-telegram"></i> Telegram</a>
+            <a class="btn-skype" data-id="sk"><i class="fa fa-skype"></i> Skype</a>
+            <a class="btn-whatsapp" data-id="wa"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+            <a class="btn-mail" data-id="mail"><i class="fa fa-at"></i> EMail</a>
+        </div>
+    </main>
+
+    <footer>
+        <span stonejs>If you like my work 💪 You can help me stay motivated 🍓 :</span>
+        <a href='https://www.paypal.com/donate?hosted_button_id=LF4ZVKCQ6GWWW'>Paypal</a>
+        | <a href='mailto:contact@so-c.me'><span>Email</span></a>
+        <!-- | <a href='https://github.com/bacloud14/so-cards'>Contribute</a> -->
+    </footer>
+    <!-- <script type="text/javascript" src="peerjs.min.js"></script>
+    <script>
+        (function () {
+
+            var lastPeerId = null;
+            var peer = null; // own peer object
+            var conn = null;
+
+            /**
+             * Create the Peer object for our end of the connection.
+             *
+             * Sets up callbacks that handle any events related to our
+             * peer object.
+             */
+            function initialize() {
+                // Create own peer object with connection to shared PeerJS server
+                peer = new Peer(null, {
+                    debug: 2
+                });
+
+                peer.on('open', function (id) {
+                    // Workaround for peer.reconnect deleting previous id
+                    if (peer.id === null) {
+                        console.log('Received null id from peer open');
+                        peer.id = lastPeerId;
+                    } else {
+                        lastPeerId = peer.id;
+                    }
+
+                    console.log('ID: ' + peer.id);
+                });
+                peer.on('connection', function (c) {
+                    // Disallow incoming connections
+                    c.on('open', function () {
+                        c.send("Sender does not accept incoming connections");
+                        setTimeout(function () { c.close(); }, 500);
+                    });
+                });
+                peer.on('disconnected', function () {
+
+                    console.log('Connection lost. Please reconnect');
+
+                    // Workaround for peer.reconnect deleting previous id
+                    peer.id = lastPeerId;
+                    peer._lastServerId = lastPeerId;
+                    peer.reconnect();
+                });
+                peer.on('close', function () {
+                    conn = null;
+                    console.log('Connection destroyed');
+                });
+                peer.on('error', function (err) {
+                    console.log(err);
+                });
+            };
+
+            /**
+             * Create the connection between the two Peers.
+             *
+             * Sets up callbacks that handle any events related to the
+             * connection and data received on it.
+             */
+            function join() {
+                // Close old connection
+                if (conn) {
+                    conn.close();
+                }
+
+                // Create connection to destination peer specified in the input field
+                conn = peer.connect(_id, {
+                    reliable: true
+                });
+
+                conn.on('open', function () {
+                    console.log("Connected to: " + conn.peer);
+                    conn.send("command");
+                });
+                // Handle incoming data (messages only since this is the signal sender)
+                conn.on('data', function (data) {
+                    console.log(data);
+                });
+                conn.on('close', function () {
+                    console.log("Connection closed");
+                });
+            };
+            // Since all our callbacks are setup, start the process of obtaining an ID
+            initialize();
+            setTimeout(function () { join(); }, 1000)
+        })();
+    </script> -->
+</body>
+<script type="text/javascript" src="libs/stonejs.min.js"></script>
+<script type="text/javascript" src="libs/stoneJSCatalog.js"></script>
+<script type="text/javascript" src="libs/XORCipher.js"></script>
+<script type="text/javascript" src="card.js"></script>
+
+</html>
