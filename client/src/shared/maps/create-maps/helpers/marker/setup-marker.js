@@ -2,6 +2,7 @@ import { isMarkerInsidePolygon } from "./is-marker-inside-polygon";
 const states = require ('../../../../../data/states.json');
 import { LIS } from "../../../../../helpers/lis";
 import { getStateNames } from "../../../../../data/get-state-names";
+const MobileDetect = require('mobile-detect');
 const polygon = states.features.map((a) => a.geometry.coordinates[0]);
 /**
  * Attach one marker to map with constraints (marker is draggble but cannot go out of )
@@ -13,6 +14,7 @@ const polygon = states.features.map((a) => a.geometry.coordinates[0]);
  */
 export function moveableMarker(map, marker, coordinates) {
   const names = getStateNames();
+  var md = new MobileDetect(window.navigator.userAgent);
   let lastValid = [];
   /**
    * blablabla (0_o)
@@ -22,8 +24,22 @@ export function moveableMarker(map, marker, coordinates) {
     marker.setLatLng(evt.latlng);
   }
 
-  marker.on("mousedown", () => {
+  marker.on("mousedown", (event) => {
     map.dragging.disable();
+    if(md.mobile()) {
+      let {lat: circleStartingLat, lng: circleStartingLng} = marker._latlng;
+      let {lat: mouseStartingLat, lng: mouseStartingLng} = event.latlng;
+      map.on('mousemove', event => {
+        let {lat: mouseNewLat, lng: mouseNewLng} = event.latlng;
+        let latDifference = mouseStartingLat - mouseNewLat;
+        let lngDifference = mouseStartingLng - mouseNewLng;
+    
+        let center_ = [circleStartingLat-latDifference, circleStartingLng-lngDifference];
+        marker.setLatLng(center_);
+      });
+      return;
+    }
+    
     map.on("mousemove", trackCursor);
   });
 
