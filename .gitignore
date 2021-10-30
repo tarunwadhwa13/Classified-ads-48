@@ -67,3 +67,5 @@ log/
 creds/
 /sessions
 /client/dist
+/app_blog/build
+/app_blog/node_modules
