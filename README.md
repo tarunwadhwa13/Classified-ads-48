@@ -30,7 +30,7 @@ The purpose of this project is to let forkers implement new sections and offer t
 
 **Classified-ads-48** utilizes many front and back-end libraries to offer a rich set of form, users can post HTML styled articles with pictures.
 
-**Classified-ads-48** respects user privacy and offers a passwordless login.
+**Classified-ads-48** respects user privacy and offers an oauth login.
 
 **Classified-ads-48** acts like a Man In the Middle to offer messaging between users. Without a heavy messaging system like internal messages box. It rather let users use their respective emails.
 
