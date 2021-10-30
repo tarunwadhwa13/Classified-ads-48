@@ -76,7 +76,7 @@ const prepareData = () => {
 };
 
 
-const createError = require('http-errors');
+// const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -115,18 +115,18 @@ app.use(helmet({contentSecurityPolicy: false}));
 app.use(compression());
 app.use(flash());
 
-const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
-app.use(session({
-  store: new SQLiteStore,
-  secret: 'keyboard@cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: false,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  },
-}));
+const expressSession = require('express-session');
+// const SQLiteStore = require('connect-sqlite3')(session);
+// app.use(session({
+//   store: new SQLiteStore,
+//   secret: 'keyboard@cat',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: {
+//     secure: false,
+//     maxAge: 7 * 24 * 60 * 60 * 1000,
+//   },
+// }));
 
 app.use(i18nextMiddleware.handle(i18next));
 app.get('/i18n/:locale', (req, res) => {
@@ -136,8 +136,8 @@ app.get('/i18n/:locale', (req, res) => {
 });
 
 
-const passwordless = require('passwordless');
-const NodeCacheStore = require('passwordless-nodecache');
+// const passwordless = require('passwordless');
+// const NodeCacheStore = require('passwordless-nodecache');
 const nodemailer = require('nodemailer');
 // const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
@@ -184,18 +184,18 @@ function logginMail(mailMessage, recipient) {
   });
 }
 
-passwordless.init(new NodeCacheStore());
-// Set up a delivery service
-passwordless.addDelivery(
-    function(tokenToSend, uidToSend, recipient, callback, req) {
-      const host = `${APIHost[process.env.NODE_ENV]}/logged_in`;
-      const text = 'Hello!\nAccess your account here: ' +
-      host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
-      logginMail(text, recipient);
-    });
-app.use(passwordless.sessionSupport());
-app.use(passwordless.acceptToken());
-global.passwordless = passwordless;
+// passwordless.init(new NodeCacheStore());
+// // Set up a delivery service
+// passwordless.addDelivery(
+//     function(tokenToSend, uidToSend, recipient, callback, req) {
+//       const host = `${APIHost[process.env.NODE_ENV]}/logged_in`;
+//       const text = 'Hello!\nAccess your account here: ' +
+//       host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
+//       logginMail(text, recipient);
+//     });
+// app.use(passwordless.sessionSupport());
+// app.use(passwordless.acceptToken());
+// global.passwordless = passwordless;
 
 
 // view engine setup
@@ -212,6 +212,8 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 
 // Process generic parameters
 const processParams = function(req, res, next) {
+  // 0: loggin
+  res.locals.isAuthenticated = req.isAuthenticated;
   // 1: Trimmer
   req.body = _.object(_.map(req.body, function(value, key) {
     if (value && value.length) {
@@ -223,7 +225,7 @@ const processParams = function(req, res, next) {
   // 2: Pagination
   // Add pagination constants based on API, device, browser, etc.
   // No pagination for search pages
-  if (req.url.indexOf('geolocation')>=0 || req.url.indexOf('gwoogl')>=0) {
+  if (req.url.indexOf('geolocation') >= 0 || req.url.indexOf('gwoogl') >= 0) {
     return next();
   }
   const perPage = 9;
@@ -242,6 +244,7 @@ app.use('/listings', listingsRouter);
 app.use('/data', dataRouter);
 app.use('/', gameRouter);
 
+
 const rateLimit = require('express-rate-limit');
 const addLimiter = rateLimit(PING_LIMITER.RATE_LIMIT);
 // /listings/ + /^\/(donations|skills|blogs)/
@@ -252,11 +255,6 @@ const slowDown = require('express-slow-down');
 app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, etc)
 const speedLimiter = slowDown(PING_LIMITER.SLOW_DOWN_LIMIT);
 app.use(speedLimiter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -294,6 +292,68 @@ app.use(function(req, res, next) {
       });
 });
 
+
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
+const authRouter = require('./auth');
+
+/**
+ * Session Configuration (New!)
+ */
+const session = {
+  secret: process.env.SESSION_SECRET,
+  cookie: {},
+  resave: false,
+  saveUninitialized: false,
+};
+// if (app.get("env") === "production") {
+//   // Serve secure cookies, requires HTTPS
+//   session.cookie.secure = true;
+// }
+
+/**
+ * Passport Configuration (New!)
+ */
+const strategy = new Auth0Strategy(
+    {
+      domain: process.env.AUTH0_DOMAIN,
+      clientID: process.env.AUTH0_CLIENT_ID,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      callbackURL: process.env.AUTH0_CALLBACK_URL,
+    },
+    function(accessToken, refreshToken, extraParams, profile, done) {
+    /**
+     * Access tokens are used to authorize users to an API
+     * (resource server)
+     * accessToken is the token to call the Auth0 API
+     * or a secured third-party API
+     * extraParams.id_token has the JSON Web Token
+     * profile has all the information from the user
+     */
+      return done(null, profile);
+    },
+);
+
+
+/**
+ *  App Configuration
+ */
+app.use(expressSession(session));
+
+passport.use(strategy);
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  _logger.log({level: 'error', message: 'user ' + JSON.stringify(user)});
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+app.use('/', authRouter);
 
 module.exports = app;
 
