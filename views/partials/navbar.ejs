@@ -36,7 +36,7 @@
                 <% if(typeof user == 'undefined'){ %>
                     <li class="nav-item"><a class="nav-link" data-trans="(login)" href="/login">Login 🔒</a></li>
                 <% } else { %>
-                    <li class="nav-item"><a class="nav-link" href="/listings/user">Welcome <%= user %></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/listings/user">Welcome <%= user.nickname %></a></li>
                 <% }%>
             </ul>
             <form class=".form-inline">

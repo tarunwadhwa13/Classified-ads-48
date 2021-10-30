@@ -206,7 +206,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/so-c', express.static(path.join(__dirname, 'so-cards')));
+app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')));
 app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 // const customFilter = new Filter({placeHolder: 'x'});
 
@@ -214,6 +214,7 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 const processParams = function(req, res, next) {
   // 0: loggin
   res.locals.isAuthenticated = req.isAuthenticated;
+  res.locals.user = req.user;
   // 1: Trimmer
   req.body = _.object(_.map(req.body, function(value, key) {
     if (value && value.length) {
