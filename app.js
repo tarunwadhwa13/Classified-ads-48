@@ -87,7 +87,6 @@ const compression = require('compression');
 // var CensorifyIt = require('censorify-it')
 const helmet = require('helmet');
 
-
 const i18next = require('i18next');
 const Backend = require('i18next-node-fs-backend');
 const i18nextMiddleware = require('i18next-express-middleware');
@@ -116,6 +115,7 @@ app.use(compression());
 app.use(flash());
 
 const expressSession = require('express-session');
+const FileStore = require('session-file-store')(expressSession);
 // const SQLiteStore = require('connect-sqlite3')(session);
 // app.use(session({
 //   store: new SQLiteStore,
@@ -203,8 +203,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.json());
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.urlencoded({extended: false}));
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')));
 app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
@@ -212,9 +213,15 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 
 // Process generic parameters
 const processParams = function(req, res, next) {
-  // 0: loggin
   res.locals.isAuthenticated = req.isAuthenticated;
-  res.locals.user = req.user;
+  _logger.log({level: 'info', message: req.isAuthenticated});
+  if (req.isAuthenticated) {
+    _logger.log({level: 'info', message: 'login:: user is authenticated'});
+    res.locals.user = req.user;
+  } else {
+    _logger.log({level: 'info', message: 'login:: user is not authenticated'});
+  }
+
   // 1: Trimmer
   req.body = _.object(_.map(req.body, function(value, key) {
     if (value && value.length) {
@@ -235,6 +242,7 @@ const processParams = function(req, res, next) {
   next();
 };
 app.use(processParams);
+
 
 const indexRouter = require('./lib/routes/index');
 const listingsRouter = require('./lib/routes/listings');
@@ -302,10 +310,11 @@ const authRouter = require('./auth');
  * Session Configuration (New!)
  */
 const session = {
+  store: new FileStore,
   secret: process.env.SESSION_SECRET,
   cookie: {},
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 };
 // if (app.get("env") === "production") {
 //   // Serve secure cookies, requires HTTPS
@@ -346,7 +355,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => {
-  _logger.log({level: 'error', message: 'user ' + JSON.stringify(user)});
+  _logger.log({level: 'info', message: 'serialize:: user nikname ' + user.nickname});
+  // _logger.log({level: 'info', message: 'serialize:: user email ' + user.emails[0].value});
+  // _logger.log({level: 'info', message: 'serialize:: user nikname ' + user.picture});
+  // _logger.log({level: 'info', message: 'serialize:: user ' + JSON.stringify(user)});
   done(null, user);
 });
 
