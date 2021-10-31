@@ -188,35 +188,11 @@ const schema = {
 };
 
 const oAuthSampleProfile = {
-  'displayName':'A Ben',
-  'id':'google-oauth2|#######',
-  'user_id':'google-oauth2|#######',
-  'provider':'google-oauth2',
-  'name':{
-    'familyName':'Ben',
-    'givenName':'A'
-  },
-  'emails':[
-    {
-      'value':'bacloud14@gmail.com'
-    }
-  ],
-  'picture':'https://lh3.googleusercontent.com/a/AATXAJwkHr4D-xfuPdn6osK7-k884sA8E8UxLm0p_7FO=s96-c',
-  'locale':'en',
-  'nickname':'bacloud14',
-  '_json':{
-    'sub':'google-oauth2|#######',
-    'given_name':'A',
-    'family_name':'Ben',
-    'nickname':'bacloud14',
-    'name':'A Ben',
-    'picture':'https://lh3.googleusercontent.com/a/AATXAJwkHr4D-xfuPdn6osK7-k884sA8E8UxLm0p_7FO=s96-c',
-    'locale':'en',
-    'updated_at':'2021-10-30T07:59:36.744Z',
-    'email':'bacloud14@gmail.com',
-    'email_verified':true
-  },
-  '_raw':'{"sub":"google-oauth2|######"}'
+  'email': 'bacloud14@gmail.com',
+  'picture': 'https://lh3.googleusercontent.com/a/AATXAJwkHr4D-xfuPdn6osK7-k884sA8E8UxLm0p_7FO=s96-c',
+  'nickname': 'bacloud14',
+  'email_verified': true,
+  'sub': 'google-oauth2|######',
 };
 
 // eslint-disable-next-line max-len
@@ -249,7 +225,7 @@ for (let index = 0; index < 400; index++) {
     type: 'Point',
     coordinates: [item.lng, item.lat],
   };
-  oAuthSampleProfile.emails[0].value = item.usr;
+  oAuthSampleProfile.email = item.usr;
   item.user = oAuthSampleProfile;
   items.push(item);
 }

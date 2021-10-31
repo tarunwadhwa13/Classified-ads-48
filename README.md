@@ -125,6 +125,12 @@ GCLOUD_STORAGE_BUCKET={Google-cloud-storage bucket name}
 CREDS_PATH=./creds/{{Google-cloud-storage credentials file-name}}
 REDIS_PORT={REDIS_PORT || 6379}
 REDIS_HOST={REDIS_HOST || localhost}
+AUTH0_CLIENT_ID={AUTH0_CLIENT_ID}
+AUTH0_DOMAIN=https://{AUTH0_DOMAIN}
+AUTH0_CLIENT_SECRET={AUTH0_CLIENT_SECRET}
+SESSION_SECRET={secure random long string}
+AUTH0_CALLBACK_URL={Callback URL || http://localhost:3000/callback}
+AUTH0_BASEURL={Localhost URL || http://localhost:3000}
 ```
 
 **client/.env**  

@@ -1,4 +1,3 @@
-
 const {APIHost, OUTLOOK, PING_LIMITER} = require('./consts');
 
 const bootstrap = require('./bootstrap').ops;
@@ -78,10 +77,9 @@ const prepareData = () => {
 
 // const createError = require('http-errors');
 const express = require('express');
+const {auth} = require('express-openid-connect');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
-const _ = require('underscore');
 // const Filter = require('bad-words');
 const compression = require('compression');
 // var CensorifyIt = require('censorify-it')
@@ -107,37 +105,40 @@ i18next
       },
     });
 
+const authConfig = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SESSION_SECRET,
+  baseURL: process.env.AUTH0_BASEURL,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH0_DOMAIN,
+};
 
 const app = express();
-
+app.use(auth(authConfig));
 app.use(helmet({contentSecurityPolicy: false}));
 app.use(compression());
 app.use(flash());
-
-const expressSession = require('express-session');
-const FileStore = require('session-file-store')(expressSession);
-// const SQLiteStore = require('connect-sqlite3')(session);
-// app.use(session({
-//   store: new SQLiteStore,
-//   secret: 'keyboard@cat',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     secure: false,
-//     maxAge: 7 * 24 * 60 * 60 * 1000,
-//   },
-// }));
-
 app.use(i18nextMiddleware.handle(i18next));
+
 app.get('/i18n/:locale', (req, res) => {
   res.cookie('locale', req.params.locale);
   if (req.headers.referer) res.redirect(req.headers.referer);
   else res.redirect('/');
 });
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
-// const passwordless = require('passwordless');
-// const NodeCacheStore = require('passwordless-nodecache');
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'public')));
+// app.use(cookieParser(process.env.SESSION_SECRET));
+app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')));
+app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
+// const customFilter = new Filter({placeHolder: 'x'});
+
 const nodemailer = require('nodemailer');
 // const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
@@ -184,40 +185,13 @@ function logginMail(mailMessage, recipient) {
   });
 }
 
-// passwordless.init(new NodeCacheStore());
-// // Set up a delivery service
-// passwordless.addDelivery(
-//     function(tokenToSend, uidToSend, recipient, callback, req) {
-//       const host = `${APIHost[process.env.NODE_ENV]}/logged_in`;
-//       const text = 'Hello!\nAccess your account here: ' +
-//       host + '?token=' + tokenToSend + '&uid=' + encodeURIComponent(uidToSend);
-//       logginMail(text, recipient);
-//     });
-// app.use(passwordless.sessionSupport());
-// app.use(passwordless.acceptToken());
-// global.passwordless = passwordless;
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(express.json());
-app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(express.urlencoded({extended: false}));
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')));
-app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
-// const customFilter = new Filter({placeHolder: 'x'});
-
 // Process generic parameters
+const _ = require('underscore');
 const processParams = function(req, res, next) {
-  res.locals.isAuthenticated = req.isAuthenticated;
-  _logger.log({level: 'info', message: req.isAuthenticated});
-  if (req.isAuthenticated) {
-    _logger.log({level: 'info', message: 'login:: user is authenticated'});
-    res.locals.user = req.user;
+  res.locals.isAuthenticated = req.oidc.isAuthenticated();
+
+  if (req.oidc.isAuthenticated()) {
+    res.locals.user = req.oidc.user;
   } else {
     _logger.log({level: 'info', message: 'login:: user is not authenticated'});
   }
@@ -300,73 +274,6 @@ app.use(function(req, res, next) {
         return next();
       });
 });
-
-
-const passport = require('passport');
-const Auth0Strategy = require('passport-auth0');
-const authRouter = require('./auth');
-
-/**
- * Session Configuration (New!)
- */
-const session = {
-  store: new FileStore,
-  secret: process.env.SESSION_SECRET,
-  cookie: {},
-  resave: false,
-  saveUninitialized: true,
-};
-// if (app.get("env") === "production") {
-//   // Serve secure cookies, requires HTTPS
-//   session.cookie.secure = true;
-// }
-
-/**
- * Passport Configuration (New!)
- */
-const strategy = new Auth0Strategy(
-    {
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENT_ID,
-      clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      callbackURL: process.env.AUTH0_CALLBACK_URL,
-    },
-    function(accessToken, refreshToken, extraParams, profile, done) {
-    /**
-     * Access tokens are used to authorize users to an API
-     * (resource server)
-     * accessToken is the token to call the Auth0 API
-     * or a secured third-party API
-     * extraParams.id_token has the JSON Web Token
-     * profile has all the information from the user
-     */
-      return done(null, profile);
-    },
-);
-
-
-/**
- *  App Configuration
- */
-app.use(expressSession(session));
-
-passport.use(strategy);
-app.use(passport.initialize());
-app.use(passport.session());
-
-passport.serializeUser((user, done) => {
-  _logger.log({level: 'info', message: 'serialize:: user nikname ' + user.nickname});
-  // _logger.log({level: 'info', message: 'serialize:: user email ' + user.emails[0].value});
-  // _logger.log({level: 'info', message: 'serialize:: user nikname ' + user.picture});
-  // _logger.log({level: 'info', message: 'serialize:: user ' + JSON.stringify(user)});
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-app.use('/', authRouter);
 
 module.exports = app;
 
