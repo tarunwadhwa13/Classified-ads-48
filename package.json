@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node bin/www",
-    "dev:server": "node bin/www",
+    "scss:watch": "sass --watch public/stylesheets:public/stylesheets",
+    "dev": "run-p scss:watch start",
     "prestart": "cd client && npm run build:client"
   },
   "dependencies": {
@@ -60,6 +61,7 @@
     "pngquant-bin": "^6.0.0",
     "safe-compare": "^1.1.4",
     "sanitize-html": "^2.4.0",
+    "sass": "^1.43.4",
     "serve": "^12.0.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.1.3",
@@ -73,6 +75,8 @@
     "eslint-config-google": "^0.14.0",
     "faker": "^5.5.3",
     "json-schema-faker": "0.5.0-rcv.34",
-    "prettier": "2.3.2"
+    "npm-run-all": "^4.1.5",
+    "prettier": "2.3.2",
+    "scss": "^0.2.4"
   }
 }

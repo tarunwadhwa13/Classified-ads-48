@@ -8,6 +8,7 @@
     filter: var(--map-tiles-filter, none);
   }
 }
+
 label {
   padding-top: 1% !important;
 }
@@ -111,6 +112,7 @@ pre {
 }
 
 /* font picker */
+
 .dropdown-button,
 .font-list-item {
   color: black !important;
@@ -135,8 +137,8 @@ pre {
   height: 400px;
   z-index: 99;
 }
-
 /* Style the Image Used to Trigger the Modal */
+
 #imgg {
   border-radius: 5px;
   cursor: pointer;
@@ -148,6 +150,7 @@ pre {
 }
 
 /* The Modal (background) */
+
 .modal {
   display: none;
   /* Hidden by default */
@@ -165,13 +168,14 @@ pre {
   /* Full height */
   overflow: auto;
   /* Enable scroll if needed */
-  background-color: black;
+  background-color: rgb(0, 0, 0);
   /* Fallback color */
   background-color: rgba(0, 0, 0, 0.9);
   /* Black w/ opacity */
 }
 
 /* Modal Content (Image) */
+
 .modal-content {
   margin: auto;
   display: block;
@@ -180,6 +184,7 @@ pre {
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
+
 #caption {
   margin: auto;
   display: block;
@@ -192,6 +197,7 @@ pre {
 }
 
 /* Add Animation - Zoom in the Modal */
+
 .modal-content,
 #caption {
   animation-name: zoom;
@@ -206,7 +212,9 @@ pre {
     transform: scale(1);
   }
 }
+
 /* The Close Button */
+
 .close {
   position: absolute;
   top: 15px;
@@ -225,11 +233,13 @@ pre {
 }
 
 /* 100% Image Width on Smaller Screens */
+
 @media only screen and (max-width: 700px) {
   .modal-content {
     width: 100%;
   }
 }
+
 @media screen and (min-width: 1400px) {
   #upper_left {
     width: 125px;
@@ -240,7 +250,6 @@ pre {
     background-image: url("/images/1546457182.svg");
     background-repeat: no-repeat;
   }
-
   #upper_right {
     width: 125px;
     height: 125px;
@@ -250,7 +259,6 @@ pre {
     background-image: url("/images/1546457622.svg");
     background-repeat: no-repeat;
   }
-
   #lower_right {
     width: 125px;
     height: 125px;
@@ -261,6 +269,7 @@ pre {
     background-repeat: no-repeat;
   }
 }
+
 .hidden {
   display: none;
 }
@@ -302,83 +311,59 @@ pre {
   padding: 1rem;
 }
 
+
 form {
   border: 1px solid #aaa;
   border-radius: 4px;
-  padding: 0.5em 0.5em 0;
+  padding: .5em .5em 0;
   margin-top: 1rem;
 }
 
 details {
   border: 1px solid #aaa;
   border-radius: 4px;
-  padding: 0.5em 0.5em 0;
+  padding: .5em .5em 0;
   margin-top: 1rem;
 }
 
 summary {
   font-weight: bold;
-  margin: -0.5em -0.5em 0;
-  padding: 0.5em;
+  margin: -.5em -.5em 0;
+  padding: .5em;
 }
 
 details[open] {
-  padding: 0.5em;
+  padding: .5em;
 }
 
 details[open] summary {
   border-bottom: 1px solid #aaa;
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
 }
 
-details:nth-of-type(1) {
-  background-color: #cb997e50 !important;
-  margin-top: 1rem;
-}
+$details_colors: (
+  #cb997e50,
+  #ddbea950,
+  #ffe8d650,
+  #b7b7a450,
+  #a5a58d50,
+);
 
-form:nth-of-type(1) {
-  background-color: #8e9aaf50 !important;
-  margin-top: 1rem;
-}
+$forms_colors: (
+  #8e9aaf50,
+  #cbc0d350,
+  #efd3d750,
+  #feeafa50,
+  #dee2ff50
+);
 
-details:nth-of-type(2) {
-  background-color: #ddbea950 !important;
-  margin-top: 1rem;
+@for $i from 1 through 5 {
+  details:nth-of-type(#{$i}) {
+      background-color: nth($details_colors, $i) !important;
+      margin-top: 1rem;
+  }
+  form:nth-of-type(#{$i}) {
+    background-color: nth($forms_colors, $i) !important;
+    margin-top: 1rem;
+  }
 }
-
-form:nth-of-type(2) {
-  background-color: #cbc0d350 !important;
-  margin-top: 1rem;
-}
-
-details:nth-of-type(3) {
-  background-color: #ffe8d650 !important;
-  margin-top: 1rem;
-}
-
-form:nth-of-type(3) {
-  background-color: #efd3d750 !important;
-  margin-top: 1rem;
-}
-
-details:nth-of-type(4) {
-  background-color: #b7b7a450 !important;
-  margin-top: 1rem;
-}
-
-form:nth-of-type(4) {
-  background-color: #feeafa50 !important;
-  margin-top: 1rem;
-}
-
-details:nth-of-type(5) {
-  background-color: #a5a58d50 !important;
-  margin-top: 1rem;
-}
-
-form:nth-of-type(5) {
-  background-color: #dee2ff50 !important;
-  margin-top: 1rem;
-}
-
-/*# sourceMappingURL=style.css.map */
