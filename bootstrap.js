@@ -213,7 +213,7 @@ function getRandomInRange(from, to, fixed) {
   return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
 }
 
-for (let index = 0; index < 400; index++) {
+for (let index = 0; index < 200; index++) {
   const item = jsf.generate(schema);
   item.img = 'https://live.staticflickr.com/3938/15615468856_92275201d5_b.jpg';
   item.div = wilayas[Math.floor(Math.random()*wilayas.length)];

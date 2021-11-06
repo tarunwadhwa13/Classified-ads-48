@@ -164,26 +164,6 @@ transporter.verify(function(error, success) {
   }
 });
 
-/**
- * Send an email using Outlook options
- * From Admin to loggin users
- * @param {string} mailMessage HTML content
- * @param {string} recipient address of recipient
- */
-function logginMail(mailMessage, recipient) {
-  transporter.sendMail({
-    from: EMAIL_FROM,
-    to: recipient,
-    subject: '@@LISTINGS@@',
-    html: mailMessage,
-    text: mailMessage,
-    replyTo: EMAIL_FROM,
-  }, (err, info) => {
-    logger.log({level: 'error', message: 'message envelope: ' + info.messageId});
-    logger.log({level: 'error', message: 'message envelope: ' + info.envelope});
-    logger.log({level: 'error', message: err});
-  });
-}
 
 // Process generic parameters
 const _ = require('underscore');
