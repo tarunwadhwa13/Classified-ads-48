@@ -225,7 +225,7 @@ for (let index = 0; index < 200; index++) {
     type: 'Point',
     coordinates: [item.lng, item.lat],
   };
-  oAuthSampleProfile.email = item.usr;
+  // oAuthSampleProfile.email = item.usr;
   item.user = oAuthSampleProfile;
   items.push(item);
 }

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Ruda:900");
 :root {
   --map-tiles-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg)
     saturate(0.3) brightness(0.7);
@@ -303,19 +304,33 @@ pre {
 }
 
 form {
-  border: 1px solid #aaa;
-  border-radius: 4px;
   padding: 0.5em 0.5em 0;
   margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.185);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 details {
-  border: 1px solid #aaa;
-  border-radius: 4px;
+  border: 0.1rem solid #c4c4c4a2;
   padding: 0.5em 0.5em 0;
   margin-top: 1rem;
+  background-image: url(//www.toptal.com/designers/subtlepatterns/patterns/symphony.png);
+  background-position: bottom;
+  animation: 15s linear 0s infinite bp;
+  display: flex;
 }
 
+@keyframes bp {
+  from {
+    background-position: 198px 0;
+  }
+  to {
+    background-position: 0 198px;
+  }
+}
 summary {
   font-weight: bold;
   margin: -0.5em -0.5em 0;
@@ -336,18 +351,8 @@ details:nth-of-type(1) {
   margin-top: 1rem;
 }
 
-form:nth-of-type(1) {
-  background-color: #8e9aaf50 !important;
-  margin-top: 1rem;
-}
-
 details:nth-of-type(2) {
   background-color: #ddbea950 !important;
-  margin-top: 1rem;
-}
-
-form:nth-of-type(2) {
-  background-color: #cbc0d350 !important;
   margin-top: 1rem;
 }
 
@@ -356,28 +361,13 @@ details:nth-of-type(3) {
   margin-top: 1rem;
 }
 
-form:nth-of-type(3) {
-  background-color: #efd3d750 !important;
-  margin-top: 1rem;
-}
-
 details:nth-of-type(4) {
   background-color: #b7b7a450 !important;
   margin-top: 1rem;
 }
 
-form:nth-of-type(4) {
-  background-color: #feeafa50 !important;
-  margin-top: 1rem;
-}
-
 details:nth-of-type(5) {
   background-color: #a5a58d50 !important;
-  margin-top: 1rem;
-}
-
-form:nth-of-type(5) {
-  background-color: #dee2ff50 !important;
   margin-top: 1rem;
 }
 

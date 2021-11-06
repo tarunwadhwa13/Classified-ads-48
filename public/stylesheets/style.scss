@@ -1,3 +1,6 @@
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
 :root {
   --map-tiles-filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg)
     saturate(0.3) brightness(0.7);
@@ -311,19 +314,37 @@ pre {
   padding: 1rem;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Ruda:900');
 
 form {
-  border: 1px solid #aaa;
-  border-radius: 4px;
   padding: .5em .5em 0;
   margin-top: 1rem;
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.185);
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
 details {
-  border: 1px solid #aaa;
-  border-radius: 4px;
+  border: 0.1rem solid #c4c4c4a2;
   padding: .5em .5em 0;
   margin-top: 1rem;
+
+  background-image: url(//www.toptal.com/designers/subtlepatterns/patterns/symphony.png);
+  background-position: bottom;
+  animation: 15s linear 0s infinite bp;
+  display: flex;
+}
+
+@keyframes bp {
+  from {
+    background-position:  198px 0;
+  }
+  
+  to {
+    background-position:  0 198px;
+  }
 }
 
 summary {
@@ -357,13 +378,17 @@ $forms_colors: (
   #dee2ff50
 );
 
+$bootstrap_mapping: (
+  Indigo, Purple, Pink, Teal, Cyan, 
+);
+
 @for $i from 1 through 5 {
   details:nth-of-type(#{$i}) {
       background-color: nth($details_colors, $i) !important;
       margin-top: 1rem;
   }
-  form:nth-of-type(#{$i}) {
-    background-color: nth($forms_colors, $i) !important;
-    margin-top: 1rem;
-  }
+  // form:nth-of-type(#{$i}) {
+  //   background-color: nth($forms_colors, $i) !important;
+  //   margin-top: 1rem;
+  // }
 }
