@@ -323,14 +323,16 @@ ops.seedDevelopmenetData = async function seedDevelopmenetData(_logger, db) {
 };
 
 ops.createIndexes = async function createIndexes(_logger, db) {
-  const collection = db.collection('listing');
-  await collection.createIndex(
+  const listingCollection = db.collection('listing');
+  await listingCollection.createIndex(
       {'title': 'text', 'desc': 'text'},
       {'weights': {title: 3, desc: 1}},
   );
-  await collection.createIndex( {tags: 1} );
-  await collection.createIndex( {div: 1} );
-  await collection.createIndex( {geolocation: '2dsphere'} );
+  await listingCollection.createIndex( {tags: 1} );
+  await listingCollection.createIndex( {div: 1} );
+  await listingCollection.createIndex( {geolocation: '2dsphere'} );
+  const userCollection = db.collection('user');
+  await userCollection.createIndex( {to: 1, sent: 1});
   return;
 };
 
