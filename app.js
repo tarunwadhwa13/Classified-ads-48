@@ -157,12 +157,29 @@ const transportOptions = {
 const transporter = nodemailer.createTransport(transportOptions);
 transporter.verify(function(error, success) {
   if (error) {
-    // TODO: hand server completely
     logger.log({level: 'error', message: error.message});
   } else {
     logger.log({level: 'info', message: 'Messaging server ready'});
   }
 });
+
+let mailHogTransporter;
+try {
+  mailHogTransporter = nodemailer.createTransport({
+    host: '127.0.0.1',
+    port: 1025,
+  });
+  mailHogTransporter.verify(function(error, success) {
+    if (error) {
+      logger.log({level: 'error', message: error.message});
+    } else {
+      logger.log({level: 'info', message: 'MailHog server ready'});
+      global.mailHogTransporter = mailHogTransporter;
+    }
+  });
+} catch (error) {
+  logger.log({level: 'error', message: error.message});
+}
 
 
 // Process generic parameters
