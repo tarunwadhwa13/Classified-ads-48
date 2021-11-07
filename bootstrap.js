@@ -308,17 +308,93 @@ ops.checkRawDatasets = function checkRawDatasets() {
   console.log({level: 'info', message: 'Raw datasets seem to be fine'});
 };
 
+/**
+ * shuffleArray
+ * @param {*} array
+ */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+const LoremIpsum = require('lorem-ipsum').LoremIpsum;
+const lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4,
+  },
+  wordsPerSentence: {
+    max: 16,
+    min: 4,
+  },
+});
+let mailHogTransporter;
+logger_ = global._logger;
+const nodemailer = require('nodemailer');
+try {
+  mailHogTransporter = nodemailer.createTransport({
+    host: '127.0.0.1',
+    port: 1025,
+  });
+  mailHogTransporter.verify(function(error, success) {
+    if (error) {
+      logger_.log({level: 'error', message: error.message});
+    } else {
+      logger_.log({level: 'info', message: 'MailHog server ready'});
+    }
+  });
+} catch (error) {
+  logger_.log({level: 'error', message: error.message});
+}
+
+ops.seedCommunity = async function seedCommunity(mails) {
+  return new Promise(function(resolve, reject) {
+    for (let index = 0; index < 100; index++) {
+      shuffleArray(mails);
+      mailHogTransporter.sendMail({
+        from: mails[0],
+        to: mails[1],
+        subject: lorem.generateWords(4),
+        html: (lorem.generateWords(10)),
+        text: (lorem.generateWords(10)),
+      });
+    }
+  });
+};
+
 ops.seedDevelopmenetData = async function seedDevelopmenetData(_logger, db) {
   const options = {ordered: true};
   const collection = db.collection('listing');
   return new Promise(function(resolve, reject) {
-    collection.insertMany(items, options, function(err, reply) {
+    collection.insertMany(items, options, async function(err, reply) {
       console.log('Inserted seed data into the collection');
       if (err) {
         return reject(err);
       }
+      const mails = await ops.seedMailHogData(_logger, db);
+      await ops.seedCommunity(mails.emails);
       return resolve(reply);
     });
+  });
+};
+
+ops.seedMailHogData = async function seedMailHogData(_logger, db) {
+  const collection = db.collection('listing');
+  const collection_ = db.collection('mailhog');
+
+  return new Promise(function(resolve, reject) {
+    collection.find({})
+        .limit(10)
+        .toArray( async function(err, docs) {
+          if (err) {
+            return reject(err);
+          }
+          const count = await collection.countDocuments({});
+          const emails = docs.map((doc) => doc.usr);
+          
+          return resolve({emails: emails, count: count});
+        });
   });
 };
 

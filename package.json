@@ -49,6 +49,7 @@
     "joi": "^17.4.0",
     "lazy.js": "^0.5.1",
     "lodash": "^4.17.21",
+    "lorem-ipsum": "^2.0.4",
     "lowdb": "^2.1.0",
     "minisearch": "^3.0.2",
     "mobile-detect": "^1.4.5",

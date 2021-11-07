@@ -37,6 +37,25 @@ const url = process.env.NODE_ENV === 'local' ?
   'mongodb://localhost:27017' : process.env.MONGODB_URI;
 const dbName = process.env.NODE_ENV === 'development' ? 'listings_db_dev' : 'listings_db';
 const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
+let mailHogTransporter;
+const nodemailer = require('nodemailer');
+try {
+  mailHogTransporter = nodemailer.createTransport({
+    host: '127.0.0.1',
+    port: 1025,
+  });
+  mailHogTransporter.verify(function(error, success) {
+    if (error) {
+      logger.log({level: 'error', message: error.message});
+    } else {
+      logger.log({level: 'info', message: 'MailHog server ready'});
+      global.mailHogTransporter = mailHogTransporter;
+    }
+  });
+} catch (error) {
+  logger.log({level: 'error', message: error.message});
+}
+
 
 bootstrap.checkEnvironmentData(url).then(async (reply) => {
   prepareData();
@@ -139,7 +158,6 @@ app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')));
 app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 // const customFilter = new Filter({placeHolder: 'x'});
 
-const nodemailer = require('nodemailer');
 // const EMAIL_TO = process.env.EMAIL_TO;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
@@ -162,24 +180,6 @@ transporter.verify(function(error, success) {
     logger.log({level: 'info', message: 'Messaging server ready'});
   }
 });
-
-let mailHogTransporter;
-try {
-  mailHogTransporter = nodemailer.createTransport({
-    host: '127.0.0.1',
-    port: 1025,
-  });
-  mailHogTransporter.verify(function(error, success) {
-    if (error) {
-      logger.log({level: 'error', message: error.message});
-    } else {
-      logger.log({level: 'info', message: 'MailHog server ready'});
-      global.mailHogTransporter = mailHogTransporter;
-    }
-  });
-} catch (error) {
-  logger.log({level: 'error', message: error.message});
-}
 
 
 // Process generic parameters
