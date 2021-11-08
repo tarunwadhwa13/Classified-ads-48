@@ -216,37 +216,19 @@ const processParams = function(req, res, next) {
 };
 app.use(processParams);
 
-
-const indexRouter = require('./lib/routes/index');
-const listingsRouter = require('./lib/routes/listings');
-const dataRouter = require('./lib/routes/data');
-const gameRouter = require('./lib/routes/game');
-app.use('/', indexRouter);
-app.use('/listings', listingsRouter);
-app.use('/data', dataRouter);
-app.use('/', gameRouter);
-
-
-const rateLimit = require('express-rate-limit');
-const addLimiter = rateLimit(PING_LIMITER.RATE_LIMIT);
-// /listings/ + /^\/(donations|skills|blogs)/
-app.post('/listings/donations/', addLimiter);
-app.post('/listings/skills/', addLimiter);
-
-const slowDown = require('express-slow-down');
-app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, etc)
-const speedLimiter = slowDown(PING_LIMITER.SLOW_DOWN_LIMIT);
-app.use(speedLimiter);
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// Override all res.render to res.json when runing automated tests
+const renderToJson = function(req, res, next) {
+  let _render = res.render;
+  res.render = function(view, options, callback) {
+    if (process.env.NODE_ENV !== 'monkey chaos') {
+      _render.call( this, view, options, callback);
+    } else {
+      this.json(options);
+    }
+  };
+  next();
+};
+app.use(renderToJson);
 
 // Thehoneypot project: forbid spam
 const dns = require('dns');
@@ -273,6 +255,38 @@ app.use(function(req, res, next) {
         return next();
       });
 });
+
+
+const indexRouter = require('./lib/routes/index');
+const listingsRouter = require('./lib/routes/listings');
+const dataRouter = require('./lib/routes/data');
+const gameRouter = require('./lib/routes/game');
+app.use('/', indexRouter);
+app.use('/listings', listingsRouter);
+app.use('/data', dataRouter);
+app.use('/', gameRouter);
+
+
+const rateLimit = require('express-rate-limit');
+const addLimiter = rateLimit(PING_LIMITER.RATE_LIMIT);
+// /listings/ + /^\/(donations|skills|blogs)/
+app.post('/listings/donations/', addLimiter);
+app.post('/listings/skills/', addLimiter);
+
+const slowDown = require('express-slow-down');
+app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, etc)
+const speedLimiter = slowDown(PING_LIMITER.SLOW_DOWN_LIMIT);
+app.use(speedLimiter);
+
+// // error handler
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
 
 module.exports = app;
 
