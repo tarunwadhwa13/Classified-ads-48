@@ -1,3 +1,5 @@
+// TODO: revise app.use order
+
 const {APIHost, OUTLOOK, PING_LIMITER} = require('./consts');
 
 const bootstrap = require('./bootstrap').ops;
@@ -229,10 +231,12 @@ const renderToJson = function(req, res, next) {
   next();
 };
 app.use(renderToJson);
+const maybe = require('maybe-middleware');
+
 
 // Thehoneypot project: forbid spam
 const dns = require('dns');
-app.use(function(req, res, next) {
+const honeyPot = function(req, res, next) {
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   if (ip.substr(0, 7) === '::ffff:') {
     ip = ip.substr(7);
@@ -254,7 +258,8 @@ app.use(function(req, res, next) {
         }
         return next();
       });
-});
+};
+app.use(maybe(honeyPot, process.env.NODE_ENV !== 'monkey chaos'));
 
 
 const indexRouter = require('./lib/routes/index');

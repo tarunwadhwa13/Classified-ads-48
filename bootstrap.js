@@ -392,7 +392,6 @@ ops.seedMailHogData = async function seedMailHogData(_logger, db) {
           }
           const count = await collection.countDocuments({});
           const emails = docs.map((doc) => doc.usr);
-          
           return resolve({emails: emails, count: count});
         });
   });
