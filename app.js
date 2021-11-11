@@ -24,7 +24,7 @@ bootstrap.checkEnvironmentData(url).then(async (reply) => {
 const prepareData = () => {
   mongoClient.connect(async function(err) {
     assert.equal(null, err);
-    const db = getDB();
+    const db = await getDB();
     const collection = db.collection('listing');
     // Create indexes
     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local') {
