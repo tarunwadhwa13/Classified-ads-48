@@ -1,5 +1,5 @@
 
-
+const {logger, mailHogTransporter, mongoClient, getDB} = require('./pipes');
 const schema = {
   '$schema': 'http://json-schema.org/draft-07/schema',
   '$id': 'http://example.com/example.json',
@@ -233,7 +233,9 @@ for (let index = 0; index < 200; index++) {
 const ops = {};
 const keys0 = ['NODE_ENV', 'HONEYPOT_KEY', 'PASS', 'PASS2',
   'EMAIL_TO', 'EMAIL_PASS', 'EMAIL_FROM', 'MONGODB_URI',
-  'GCLOUD_STORAGE_BUCKET', 'CREDS_PATH'];
+  'GCLOUD_STORAGE_BUCKET', 'CREDS_PATH', 'AUTH0_CLIENT_ID',
+  'AUTH0_DOMAIN', 'AUTH0_CLIENT_SECRET', 'SESSION_SECRET',
+  'AUTH0_CALLBACK_URL', 'AUTH0_BASEURL'];
 const keys1 = ['NODE_ENV', 'LATITUDE', 'LONGITUDE',
   'BORDERS_FILE_URL', 'STATES_FILE_URL', 'GOOGLE_FONT_API'];
 ops.checkEnvironmentVariables = function checkEnvironmentVariables() {
@@ -329,24 +331,6 @@ const lorem = new LoremIpsum({
     min: 4,
   },
 });
-let mailHogTransporter;
-logger_ = global._logger;
-const nodemailer = require('nodemailer');
-try {
-  mailHogTransporter = nodemailer.createTransport({
-    host: '127.0.0.1',
-    port: 1025,
-  });
-  mailHogTransporter.verify(function(error, success) {
-    if (error) {
-      logger_.log({level: 'error', message: error.message});
-    } else {
-      logger_.log({level: 'info', message: 'MailHog server ready'});
-    }
-  });
-} catch (error) {
-  logger_.log({level: 'error', message: error.message});
-}
 
 ops.seedCommunity = async function seedCommunity(mails) {
   return new Promise(function(resolve, reject) {
@@ -363,7 +347,7 @@ ops.seedCommunity = async function seedCommunity(mails) {
   });
 };
 
-ops.seedDevelopmenetData = async function seedDevelopmenetData(_logger, db) {
+ops.seedDevelopmenetData = async function seedDevelopmenetData(db) {
   const options = {ordered: true};
   const collection = db.collection('listing');
   return new Promise(function(resolve, reject) {
@@ -372,14 +356,14 @@ ops.seedDevelopmenetData = async function seedDevelopmenetData(_logger, db) {
       if (err) {
         return reject(err);
       }
-      const mails = await ops.seedMailHogData(_logger, db);
+      const mails = await ops.seedMailHogData(db);
       await ops.seedCommunity(mails.emails);
       return resolve(reply);
     });
   });
 };
 
-ops.seedMailHogData = async function seedMailHogData(_logger, db) {
+ops.seedMailHogData = async function seedMailHogData(db) {
   const collection = db.collection('listing');
   const collection_ = db.collection('mailhog');
 
@@ -397,7 +381,7 @@ ops.seedMailHogData = async function seedMailHogData(_logger, db) {
   });
 };
 
-ops.createIndexes = async function createIndexes(_logger, db) {
+ops.createIndexes = async function createIndexes(db) {
   const listingCollection = db.collection('listing');
   await listingCollection.createIndex(
       {'title': 'text', 'desc': 'text'},
@@ -413,8 +397,8 @@ ops.createIndexes = async function createIndexes(_logger, db) {
 
 // TODO: verify skipping deactivated and not yet approved listings
 // TODO: Must be in a separate CRON JOB
-ops.wordsMapReduce = function wordsMapReduce(_logger, db) {
-  _logger.log({level: 'info', message: 'Running map reduce'});
+ops.wordsMapReduce = function wordsMapReduce(db) {
+  logger.log({level: 'info', message: 'Running map reduce'});
   db.collection('words').deleteMany({});
   db.collection('listing').mapReduce(
       function() {

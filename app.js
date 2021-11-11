@@ -1,5 +1,5 @@
 // TODO: revise app.use order
-
+// TODO: https://stackoverflow.com/a/54711828/1951298
 const {APIHost, OUTLOOK, PING_LIMITER} = require('./consts');
 
 const bootstrap = require('./bootstrap').ops;
@@ -7,89 +7,40 @@ bootstrap.checkEnvironmentVariables();
 
 const dotenv = require('dotenv');
 dotenv.config();
-// console.log(`Your port is ${process.env.PORT}`); // 8626
-const winston = require('winston');
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-      winston.format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss',
-      }),
-      winston.format.json(),
-  ),
-  // defaultMeta: {service: 'user-service'},
-  transports: [
-    new winston.transports.File({filename: './logs/error.log', level: 'error'}),
-    new winston.transports.File({filename: './logs/combined.log'}),
-  ],
-});
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
-  }));
-}
-
-global._logger = logger;
-
-
-// mongooooooooooooooooooooooooooooo MAIN //
-const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+
+const {logger, mailHogTransporter, mongoClient, getDB} = require('./pipes');
 const url = process.env.NODE_ENV === 'local' ?
   'mongodb://localhost:27017' : process.env.MONGODB_URI;
-const dbName = process.env.NODE_ENV === 'development' ? 'listings_db_dev' : 'listings_db';
-const client = new MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
-let mailHogTransporter;
-const nodemailer = require('nodemailer');
-try {
-  mailHogTransporter = nodemailer.createTransport({
-    host: '127.0.0.1',
-    port: 1025,
-  });
-  mailHogTransporter.verify(function(error, success) {
-    if (error) {
-      logger.log({level: 'error', message: error.message});
-    } else {
-      logger.log({level: 'info', message: 'MailHog server ready'});
-      global.mailHogTransporter = mailHogTransporter;
-    }
-  });
-} catch (error) {
-  logger.log({level: 'error', message: error.message});
-}
-
-
 bootstrap.checkEnvironmentData(url).then(async (reply) => {
   prepareData();
 }).catch((err) => {
-  _logger.log({level: 'error', message: 'Refusing to start because of ' + err});
+  logger.log({level: 'error', message: 'Refusing to start because of ' + err});
   process.exit();
 });
 
+
 // Use connect method to connect to the Server
 const prepareData = () => {
-  client.connect(async function(err) {
+  mongoClient.connect(async function(err) {
     assert.equal(null, err);
-    console.log('Connected successfully to server', 'url', url.split('@')[0],
-        'dbName', dbName);
-    const db = client.db(dbName);
+    const db = getDB();
     const collection = db.collection('listing');
     // Create indexes
     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local') {
       await collection.deleteMany({});
-      bootstrap.seedDevelopmenetData(_logger, db).then(async (reply) => {
-        await bootstrap.createIndexes(_logger, db);
-        bootstrap.wordsMapReduce(_logger, db);
+      bootstrap.seedDevelopmenetData(db).then(async (reply) => {
+        await bootstrap.createIndexes(db);
+        bootstrap.wordsMapReduce(db);
       }).catch((err) => {
-        _logger.log({level: 'error', message: 'Refusing to start because of ' + err});
+        logger.log({level: 'error', message: 'Refusing to start because of ' + err});
         process.exit();
       });
     } else {
       // TODO: deal with production indexes and map reduce functions
     }
-    global.mongodb = db;
     db.on('error', function(error) {
-      _logger.log({level: 'error', message: error});
+      logger.log({level: 'error', message: error});
       // global.mongodb.disconnect();
     });
   });
@@ -161,6 +112,7 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')));
 // const customFilter = new Filter({placeHolder: 'x'});
 
 // const EMAIL_TO = process.env.EMAIL_TO;
+const nodemailer = require('nodemailer');
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 const transportOptions = {
@@ -192,7 +144,7 @@ const processParams = function(req, res, next) {
   if (req.oidc.isAuthenticated()) {
     res.locals.user = req.oidc.user;
   } else {
-    _logger.log({level: 'info', message: 'login:: user is not authenticated'});
+    logger.log({level: 'info', message: 'login:: user is not authenticated'});
   }
 
   // 1: Trimmer
@@ -220,7 +172,7 @@ app.use(processParams);
 
 // Override all res.render to res.json when runing automated tests
 const renderToJson = function(req, res, next) {
-  let _render = res.render;
+  const _render = res.render;
   res.render = function(view, options, callback) {
     if (process.env.NODE_ENV !== 'monkey chaos') {
       _render.call( this, view, options, callback);

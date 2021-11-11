@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-logger_ = global._logger;
+const logger = require('../pipes').logger;
 
 /**
  * Module dependencies.
@@ -66,10 +66,10 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      _logger.log({level: 'error', message: bind + ' requires elevated privileges'});
+      logger.log({level: 'error', message: bind + ' requires elevated privileges'});
       process.exit(1);
     case 'EADDRINUSE':
-      _logger.log({level: 'error', message: bind + ' is already in use'});
+      logger.log({level: 'error', message: bind + ' is already in use'});
       process.exit(1);
     default:
       throw error;
@@ -79,10 +79,10 @@ function onError(error) {
 // pm2 --shutdown-with-message recieves a message to shutdown gracefully
 process.on('message', function(msg) {
   if (msg == 'shutdown') {
-    _logger.log({level: 'info', message: 'Closing all connections...'});
+    logger.log({level: 'info', message: 'Closing all connections...'});
     // global.mongodb.disconnect();
     setTimeout(function() {
-      _logger.log({level: 'info', message: 'Finished closing connections'});
+      logger.log({level: 'info', message: 'Finished closing connections'});
       process.exit(0);
     }, 1500);
   }
@@ -97,7 +97,7 @@ function onListening() {
   const bind = typeof addr === 'string' ?
     'pipe ' + addr :
     'port ' + addr.port;
-  _logger.log({level: 'info', message: 'Listening on ' + bind});
+  logger.log({level: 'info', message: 'Listening on ' + bind});
 }
 
 // ERROR HANDLING IN EXTREME CASES!!!
@@ -116,9 +116,9 @@ const gracefulShutdown = require('http-graceful-shutdown');
  */
 function shutdownFunction(signal) {
   return new Promise((resolve) => {
-    _logger.log({level: 'error', message: '... called signal: ' + signal});
+    logger.log({level: 'error', message: '... called signal: ' + signal});
     setTimeout(function() {
-      _logger.log({level: 'error', message: '... cleanup finished'});
+      logger.log({level: 'error', message: '... cleanup finished'});
       resolve();
     }, 1000);
   });
@@ -129,7 +129,7 @@ function shutdownFunction(signal) {
  */
 function finalFunction() {
   // console.log('Server gracefulls shutted down.....');
-  _logger.log({level: 'error', message: 'Server gracefulls shutted down.....'});
+  logger.log({level: 'error', message: 'Server gracefulls shutted down.....'});
 }
 
 gracefulShutdown(server,
@@ -147,6 +147,6 @@ gracefulShutdown(server,
 
 process.on('uncaughtException', function(err) {
   // handle the error safely
-  _logger.log({level: 'error', message: err});
+  logger.log({level: 'error', message: err});
   process.exit(1);
 });
