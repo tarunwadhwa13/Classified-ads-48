@@ -1,6 +1,6 @@
 # Classified-ads-48 
 
-> Hacktoberfest: I only accept pull requests where the user went through installation. Please share a capture of a working installation with pull request.
+> Beginers friendly: I only accept pull requests where the user went through installation. Please share a capture of a working installation with pull request.
 > Also, I do not accept "any" pull request. Something like: Changing a button color would (most probably) be ignored. 
 
 🧰 Tech stack

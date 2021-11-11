@@ -42,4 +42,8 @@ const prepareData = () => {
   });
 };
 
+/**
+ * NodeJS go and attach the Express app if you want;
+ * let the user try a fine or a scrambled UI depending on how CPU speed goes
+ * and how safe is the environment I may refuse to start anyway */
 module.exports = require('./sexpress');
