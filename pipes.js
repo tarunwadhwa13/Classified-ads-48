@@ -54,6 +54,8 @@ const url = process.env.NODE_ENV === 'local' ?
 const mongoClient = new MongoClient(url, {
   useNewUrlParser: true, useUnifiedTopology: true,
 });
+
+// Globale reference to avoid multiple calls.
 let db;
 // Singleton instance promise of our database
 const getDB = async () => {
