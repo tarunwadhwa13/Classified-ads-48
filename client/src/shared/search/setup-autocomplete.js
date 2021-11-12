@@ -4,29 +4,29 @@
  *    input id="autoComplete"
  */
 import autoComplete from '@tarekraafat/autocomplete.js'
-import {APIHost} from "../../consts";
+import { APIHost } from '../../consts'
 export const setupAutoComplete = async () => {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     if (!document.querySelector('input#autoComplete')) {
-      return resolve('rolling well');
+      return resolve('rolling well')
     }
     try {
       const autoCompleteJS = new autoComplete({
-        placeHolder: "Search for Listings...",
+        placeHolder: 'Search for Listings...',
         data: {
           src: async (query) => {
             try {
               // Fetch Data from external Source
-              const source = await fetch(`${APIHost[process.env.NODE_ENV]}/listings/autocomplete/${query}`);
+              const source = await fetch(`${APIHost[process.env.NODE_ENV]}/listings/autocomplete/${query}`)
               // Data is array of `Objects` | `Strings`
-              const data = await source.json();
-              return data;
+              const data = await source.json()
+              return data
             } catch (error) {
-              return error;
+              return error
             }
           },
           // Data 'Object' key to be searched
-          keys: ["_id"]
+          keys: ['_id']
         },
         cache: true,
         debounce: 300,
@@ -40,23 +40,21 @@ export const setupAutoComplete = async () => {
         events: {
           input: {
             selection: (event) => {
-              const selection = event.detail.selection.value;
-              const keyword = selection['_id'];
-              autoCompleteJS.input.value = keyword;
-              window.location.href = `${APIHost[process.env.NODE_ENV]}/keyword/${keyword}`;
+              const selection = event.detail.selection.value
+              const keyword = selection._id
+              autoCompleteJS.input.value = keyword
+              window.location.href = `${APIHost[process.env.NODE_ENV]}/keyword/${keyword}`
             }
           }
         }
-      });
-      return resolve('### function "setupAutoComplete" run successfully');
+      })
+      return resolve('### function "setupAutoComplete" run successfully')
     } catch (error) {
       console.log(
         "Maybe running where there is no input with id = 'autoComplete' in HTML | ERROR: ",
         error.message
-      );
-      return reject(new Error('### function "setupAutoComplete" failed'));
+      )
+      return reject(new Error('### function "setupAutoComplete" failed'))
     }
-    
-  });
-
-};
+  })
+}

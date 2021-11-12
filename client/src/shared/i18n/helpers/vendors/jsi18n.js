@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "unix"]*/
+/* eslint linebreak-style: ["error", "unix"] */
 /**
   jsI18n library.
   Simple client side internationalization.
@@ -8,48 +8,48 @@
 /**
  *
  */
-function JsI18n() {
-  this.locale = ''; // Current locale
-  this.locales = []; // Available locales
+function JsI18n () {
+  this.locale = '' // Current locale
+  this.locales = [] // Available locales
   /*
     Method for automatically detecting the language, does not work in every browser.
   */
-  this.detectLanguage = function(successCB, errorCB) {
+  this.detectLanguage = function (successCB, errorCB) {
     // Phonegap browser detection
     if (navigator.globalization !== null && navigator.globalization !== undefined) {
       navigator.globalization.getPreferredLanguage(
-          function(language) {
-            successCB(language);
-          },
-          function(error) {
-            errorCB(error);
-          },
-      );
+        function (language) {
+          successCB(language)
+        },
+        function (error) {
+          errorCB(error)
+        }
+      )
     // Normal browser detection
     } else {
       if (window.navigator.language !== null && window.navigator.language !== undefined) {
-        successCB(window.navigator.language);
+        successCB(window.navigator.language)
       }
     }
-  };
+  }
   /*
     Helper for translating a node
     and all its child nodes.
   */
-  this.processNode = function(node) {
+  this.processNode = function (node) {
     if (node != undefined) {
       if (node.nodeType == 1) // Element node
       {
-        const key = node.attributes['data-trans'];
+        const key = node.attributes['data-trans']
         if (key != null) {
-          translateTag(node, key.nodeValue);
+          translateTag(node, key.nodeValue)
         }
       }
 
       // Process child nodes
-      const children = node.childNodes;
+      const children = node.childNodes
       for (let i = 0; i < children.length; i++) {
-        this.processNode(children[i]);
+        this.processNode(children[i])
       }
     }
     /*
@@ -63,23 +63,23 @@ function JsI18n() {
     * @param {*} node
     * @param {*} key
     */
-    function translateTag(node, key) {
+    function translateTag (node, key) {
       if (key.indexOf('=') == -1) // Simple key
       {
-        translateNodeContent(node, key);
+        translateNodeContent(node, key)
       } else // Attribute/key pairs
       {
-        const parts = key.toLowerCase().split(';');
+        const parts = key.toLowerCase().split(';')
 
         for (let i = 0; i < parts.length; i++) {
-          const pair = parts[i].split('=');
-          const attr = pair[0].replace(/\s*(\w+)\s*/gi, '$1'); // trim
-          const k = pair[1].replace(/\s*(\.+)\s*/gi, '$1');
+          const pair = parts[i].split('=')
+          const attr = pair[0].replace(/\s*(\w+)\s*/gi, '$1') // trim
+          const k = pair[1].replace(/\s*(\.+)\s*/gi, '$1')
 
           if (attr == 'html') {
-            translateNodeContent(node, k);
+            translateNodeContent(node, k)
           } else {
-            translateNodeContent(node.attributes[attr], k);
+            translateNodeContent(node.attributes[attr], k)
           }
         }
       }
@@ -94,23 +94,23 @@ function JsI18n() {
     * @param {*} node
     * @param {*} key
     */
-    function translateNodeContent(node, key) {
-      const translation = jsI18n.t(key); // Hack, "this" does not work
+    function translateNodeContent (node, key) {
+      const translation = jsI18n.t(key) // Hack, "this" does not work
       if (node != null && translation != undefined) {
         if (node.nodeType == 1) // Element
         {
           try {
-            node.innerHTML = translation;
+            node.innerHTML = translation
           } catch (e) {
-            node.text = translation;
+            node.text = translation
           }
         } else if (node.nodeType == 2) // Attribute
         {
-          node.value = translation;
+          node.value = translation
         }
       }
     }
-  };
+  }
 }
 
 /*
@@ -118,44 +118,44 @@ function JsI18n() {
   replacing the translations
   if the locale is already defined.
 */
-JsI18n.prototype.addLocale = function(locale, translations) {
-  this.locales[locale.toString()] = translations;
-};
+JsI18n.prototype.addLocale = function (locale, translations) {
+  this.locales[locale.toString()] = translations
+}
 
 /*
   Sets the locale to use when translating.
 */
-JsI18n.prototype.setLocale = function(locale) {
-  this.locale = locale;
-};
+JsI18n.prototype.setLocale = function (locale) {
+  this.locale = locale
+}
 
 /*
   Fetches the translation associated with the given key.
 */
-JsI18n.prototype.t = function(key) {
-  const translations = this.locales[this.locale];
+JsI18n.prototype.t = function (key) {
+  const translations = this.locales[this.locale]
   if (translations != undefined) {
-    return translations[key.toString()];
+    return translations[key.toString()]
   }
-  return undefined;
-};
+  return undefined
+}
 
 /*
   Alias for JsI18n.t
 */
-JsI18n.prototype.translate = function(key) {
-  this.t(key);
-};
+JsI18n.prototype.translate = function (key) {
+  this.t(key)
+}
 
 /**
   Replaces the contents of all tags
   that have the data-trans attribute set.
 **/
-JsI18n.prototype.processPage = function() {
-  this.processNode(document.getElementsByTagName('html')[0]);
-};
+JsI18n.prototype.processPage = function () {
+  this.processNode(document.getElementsByTagName('html')[0])
+}
 
 // Global
 // no npm package
 // https://github.com/danabr/jsI18n
-export const jsI18n = new JsI18n;
+export const jsI18n = new JsI18n()
