@@ -1,7 +1,7 @@
 const bootstrap = require('./bootstrap').ops
 const dotenv = require('dotenv')
 const assert = require('assert')
-const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
+const { logger, mongoClient, getDB } = require('./pipes')
 const sexpress = require('./sexpress')
 
 bootstrap.checkEnvironmentVariables()
