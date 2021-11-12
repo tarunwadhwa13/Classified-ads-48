@@ -1,15 +1,10 @@
-const { APIHost, OUTLOOK, PING_LIMITER } = require('./consts')
-const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
-// TODO: revise app.use order
-// TODO: remove warning messages https://stackoverflow.com/a/54711828/1951298
-// const createError = require('http-errors');
+const { PING_LIMITER } = require('./consts')
+const { logger } = require('./pipes')
 const express = require('express')
 const { auth } = require('express-openid-connect')
 const path = require('path')
 const flash = require('connect-flash')
-// const Filter = require('bad-words');
 const compression = require('compression')
-// var CensorifyIt = require('censorify-it')
 const helmet = require('helmet')
 
 const i18next = require('i18next')
