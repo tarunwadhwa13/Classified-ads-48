@@ -1,5 +1,5 @@
 
-const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
+const { logger, mailHogTransporter } = require('./pipes')
 const schema = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: 'http://example.com/example.json',
