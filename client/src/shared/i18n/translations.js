@@ -26,8 +26,8 @@ export const __ar_translations = {
   '(title)': 'عنوان',
   '(title|description)': 'عنوان أو محتوى',
   '(divisions)': 'ولاية',
-  '(today-listings)': 'قوائم اليوم',
-};
+  '(today-listings)': 'قوائم اليوم'
+}
 export const __fr_translations = {
   '(today)': 'Nouveautés',
   '(categories)': 'Sections',
@@ -52,8 +52,8 @@ export const __fr_translations = {
   '(title)': 'Titre',
   '(title|description)': 'Titre ou description',
   '(divisions)': 'Wilaya',
-  '(today-listings)': 'Annonces d\'aujourd\'hui',
-};
+  '(today-listings)': 'Annonces d\'aujourd\'hui'
+}
 export const __en_translations = {
   '(today)': 'Today\'s',
   '(categories)': 'Categories',
@@ -78,5 +78,5 @@ export const __en_translations = {
   '(title)': 'Titre',
   '(title|description)': 'Title or description',
   '(divisions)': 'Divisions',
-  '(today-listings)': 'Today listings',
-};
+  '(today-listings)': 'Today listings'
+}
