@@ -1,15 +1,25 @@
-const { PING_LIMITER } = require('./consts')
-const { logger } = require('./pipes')
+const dns = require('dns')
+const path = require('path')
 const express = require('express')
 const { auth } = require('express-openid-connect')
-const path = require('path')
 const flash = require('connect-flash')
 const compression = require('compression')
 const helmet = require('helmet')
-
 const i18next = require('i18next')
 const Backend = require('i18next-node-fs-backend')
 const i18nextMiddleware = require('i18next-express-middleware')
+const slowDown = require('express-slow-down')
+const rateLimit = require('express-rate-limit')
+const _ = require('underscore')
+const maybe = require('maybe-middleware')
+
+const { PING_LIMITER } = require('./consts.js')
+const { logger } = require('./pipes.js')
+const indexRouter = require('./lib/routes/index.js')
+const listingsRouter = require('./lib/routes/listings.js')
+const dataRouter = require('./lib/routes/data.js')
+const gameRouter = require('./lib/routes/game.js')
+
 i18next
   .use(Backend)
   .use(i18nextMiddleware.LanguageDetector)
@@ -37,11 +47,14 @@ const authConfig = {
 }
 
 const app = express()
-app.use(auth(authConfig))
-app.use(helmet({ contentSecurityPolicy: false }))
-app.use(compression())
-app.use(flash())
-app.use(i18nextMiddleware.handle(i18next))
+
+app.use(
+  auth(authConfig)
+  helmet({ contentSecurityPolicy: false }),
+  compression(),
+  flash(),
+  i18nextMiddleware.handle(i18next)
+)
 
 app.get('/i18n/:locale', (req, res) => {
   res.cookie('locale', req.params.locale)
@@ -62,7 +75,6 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')))
 // const customFilter = new Filter({placeHolder: 'x'});
 
 // Process generic parameters
-const _ = require('underscore')
 const processParams = function (req, res, next) {
   res.locals.isAuthenticated = req.oidc.isAuthenticated()
 
@@ -108,10 +120,8 @@ const renderToJson = function (req, res, next) {
   next()
 }
 app.use(renderToJson)
-const maybe = require('maybe-middleware')
 
 // Thehoneypot project: forbid spam
-const dns = require('dns')
 const honeyPot = function (req, res, next) {
   let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
   if (ip.substr(0, 7) === '::ffff:') {
@@ -137,22 +147,16 @@ const honeyPot = function (req, res, next) {
 }
 app.use(maybe(honeyPot, process.env.NODE_ENV !== 'monkey chaos'))
 
-const indexRouter = require('./lib/routes/index')
-const listingsRouter = require('./lib/routes/listings')
-const dataRouter = require('./lib/routes/data')
-const gameRouter = require('./lib/routes/game')
 app.use('/', indexRouter)
 app.use('/listings', listingsRouter)
 app.use('/data', dataRouter)
 app.use('/', gameRouter)
 
-const rateLimit = require('express-rate-limit')
 const addLimiter = rateLimit(PING_LIMITER.RATE_LIMIT)
 // /listings/ + /^\/(donations|skills|blogs)/
 app.post('/listings/donations/', addLimiter)
 app.post('/listings/skills/', addLimiter)
 
-const slowDown = require('express-slow-down')
 app.enable('trust proxy') // only if you're behind a reverse proxy (Heroku, etc)
 const speedLimiter = slowDown(PING_LIMITER.SLOW_DOWN_LIMIT)
 app.use(speedLimiter)
