@@ -1,5 +1,9 @@
+const jsf = require('json-schema-faker')
+const dotenv = require('dotenv')
+const { LoremIpsum } = require('lorem-ipsum')
+const { MongoClient } = require('mongodb')
+const { logger, mailHogTransporter } = require('./pipes')
 
-const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
 const schema = {
   $schema: 'http://json-schema.org/draft-07/schema',
   $id: 'http://example.com/example.json',
@@ -43,7 +47,6 @@ const schema = {
       default: '',
       faker: 'lorem.sentence',
       description: 'Title of a listing. (required) : a small string sentence in English or Arabic. User defined.',
-      default: '',
       examples: [
         'gqrgqrgergergrege'
       ],
@@ -200,7 +203,7 @@ const wilayas = ['Adrar', 'Chlef', 'Laghouat', 'Oum El Bouaghi', 'Batna', 'Béja
 
 const langs = ['english', 'arabic', 'french']
 const sections = ['donations', 'skills', 'blogs']
-const jsf = require('json-schema-faker')
+
 jsf.extend('faker', () => require('faker'))
 const items = []
 
@@ -254,14 +257,14 @@ ops.checkEnvironmentVariables = function checkEnvironmentVariables () {
       throw Error('Not all keys are present.')
     }
   }
-  const dotenv = require('dotenv')
+
   const result1 = dotenv.config()
   const result2 = dotenv.config({ path: 'client/.env' })
   checkKeys(result1, keys0)
   checkKeys(result2, keys1)
   console.log({ level: 'info', message: 'Environment variables seem to be fine' })
 }
-const MongoClient = require('mongodb').MongoClient
+
 ops.checkEnvironmentData = async function checkEnvironmentData (url) {
   console.log({ level: 'info', message: 'Checking environment data' })
   return new Promise(function (resolve, reject) {
@@ -321,7 +324,7 @@ function shuffleArray (array) {
     [array[i], array[j]] = [array[j], array[i]]
   }
 }
-const LoremIpsum = require('lorem-ipsum').LoremIpsum
+
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
     max: 8,
@@ -366,7 +369,6 @@ ops.seedDevelopmenetData = async function seedDevelopmenetData (db) {
 
 ops.seedMailHogData = async function seedMailHogData (db) {
   const collection = db.collection('listing')
-  const collection_ = db.collection('mailhog')
 
   return new Promise(function (resolve, reject) {
     collection.find({})

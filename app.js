@@ -1,11 +1,14 @@
 const bootstrap = require('./bootstrap').ops
+const dotenv = require('dotenv')
+const assert = require('assert')
+const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
+const sexpress = require('./sexpress')
+
 bootstrap.checkEnvironmentVariables()
 
-const dotenv = require('dotenv')
 dotenv.config()
-const assert = require('assert')
 
-const { logger, mailHogTransporter, mongoClient, getDB } = require('./pipes')
+
 const url = process.env.NODE_ENV === 'local'
   ? 'mongodb://localhost:27017'
   : process.env.MONGODB_URI
@@ -46,4 +49,4 @@ const prepareData = () => {
  * NodeJS go and attach the Express app if you want;
  * let the user try a fine or a scrambled UI depending on how CPU speed goes
  * and how safe is the environment I may refuse to start anyway */
-module.exports = require('./sexpress')
+module.exports = sexpress
