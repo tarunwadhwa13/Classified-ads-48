@@ -365,7 +365,6 @@ ops.seedDevelopmenetData = async function seedDevelopmenetData (db) {
 
 ops.seedMailHogData = async function seedMailHogData (db) {
   const collection = db.collection('listing')
-  const collection_ = db.collection('mailhog')
 
   return new Promise(function (resolve, reject) {
     collection.find({})
