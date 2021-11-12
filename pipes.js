@@ -1,6 +1,10 @@
 // A file, A database, A mail transport ... all are pipes
 
 const winston = require('winston')
+const nodemailer = require('nodemailer')
+const dotenv = require('dotenv')
+const { MongoClient } = require('mongodb')
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -21,8 +25,6 @@ if (process.env.NODE_ENV !== 'production') {
   }))
 }
 
-const nodemailer = require('nodemailer')
-const dotenv = require('dotenv')
 dotenv.config()
 // TODO: UnhandledPromiseRejectionWarning
 let mailHogTransporter
@@ -43,15 +45,16 @@ try {
   logger.log({ level: 'error', message: error.message })
 }
 
-const MongoClient = require('mongodb').MongoClient
 MongoClient.prototype.isConnected = function (options) {
   options = options || {}
   if (!this.topology) return false
   return this.topology.isConnected(options)
 }
+
 const url = process.env.NODE_ENV === 'local'
   ? 'mongodb://localhost:27017'
   : process.env.MONGODB_URI
+
 const mongoClient = new MongoClient(url, {
   useNewUrlParser: true, useUnifiedTopology: true
 })
@@ -63,6 +66,7 @@ const getDB = async () => {
   const dbName = process.env.NODE_ENV === 'development'
     ? 'listings_db_dev'
     : 'listings_db'
+
   return new Promise(async function (resolve, reject) {
     if (mongoClient.isConnected()) {
       db = db || await mongoClient.db(dbName)
@@ -83,4 +87,9 @@ const getDB = async () => {
 
 // Go get mongoClient connection, to do some admin tasks
 // Further go get the db
-module.exports = { logger, mailHogTransporter, mongoClient, getDB }
+module.exports = {
+  logger,
+  mailHogTransporter,
+  mongoClient,
+  getDB
+}
