@@ -43,7 +43,6 @@ const schema = {
       default: '',
       faker: 'lorem.sentence',
       description: 'Title of a listing. (required) : a small string sentence in English or Arabic. User defined.',
-      default: '',
       examples: [
         'gqrgqrgergergrege'
       ],
