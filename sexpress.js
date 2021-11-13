@@ -49,7 +49,7 @@ const authConfig = {
 const app = express()
 
 app.use(
-  auth(authConfig)
+  auth(authConfig),
   helmet({ contentSecurityPolicy: false }),
   compression(),
   flash(),

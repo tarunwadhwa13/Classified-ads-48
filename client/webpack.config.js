@@ -1,3 +1,5 @@
+// TODO: remove __dirname for later ESM support
+// TODO: /client could benefit ESM but needs to change script tags to <script type="module" src>
 const path = require('path')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
@@ -20,21 +22,19 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const gjv = require('geojson-validation')
 
-const downloadFile = (url, path) => {
-  return new Promise(async (resolve, reject) => {
-    const res = await fetch(url)
-    const fileStream = fs.createWriteStream(path)
-    if (res.status !== 200) {
-      return reject(new Error('WebpackBeforeBuildPlugin: \nURL not found or something:\n' + url))
-    }
-    await res.body.pipe(fileStream)
-    const json = await res.json()
-    if (gjv.valid(json)) {
-      return resolve('GEOJSON is valid:\n' + url)
-    } else {
-      return reject(new Error('WebpackBeforeBuildPlugin: \nGEOJSON is not valid:\n' + url))
-    }
-  })
+const downloadFile = async (url, path) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error('WebpackBeforeBuildPlugin: \nURL not found or something:\n' + url)
+  }
+  const str = await res.text()
+  const json = JSON.parse(str)
+  fs.promises.writeFile(path, str)
+  if (gjv.valid(json)) {
+    return 'GEOJSON is valid:\n' + url
+  } else {
+    throw new Error('WebpackBeforeBuildPlugin: \nGEOJSON is not valid:\n' + url)
+  }
 }
 
 module.exports = {
