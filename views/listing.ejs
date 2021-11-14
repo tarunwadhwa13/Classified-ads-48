@@ -15,14 +15,12 @@
 
 <body>
   <!-- TODO: reactive style if title == 'reactivate' -->
-  <div id="upper_left" class="svg"></div>
-  <div id="upper_right" class="svg"></div>
+  <div id="upper_left" class="svg my-3"></div>
+  <div id="upper_right" class="svg my-3"></div>
   <!-- <div id="lower_left"></div> -->
   <div id="lower_right" class="svg"></div>
+  <%- include('partials/navbar'); %>
   <div class="container">
-
-    <%- include('partials/navbar'); %>
-
     <h1>
       <%= title %>
     </h1>
@@ -47,7 +45,11 @@
       <% } %>
       <br>
       <hr>
-      <img id="imgg" src="<%- data.img %>" width="200rem"> 
+      <div class="d-flex">
+        <div class="mx-auto mx-lg-0">
+          <img id="imgg" src="<%- data.img %>" width="200rem"> 
+        </div>
+      </div>
       <!-- The Modal -->
       <div id="myModal" class="modal">
 
@@ -56,7 +58,7 @@
 
         <!-- Modal Content (The Image) -->
         <img class="modal-content" id="img01">
-
+        
         <!-- Modal Caption (Image Text) -->
         <div id="caption"></div>
       </div>
@@ -67,24 +69,22 @@
       <form action="contact" method="POST">
         <div>
           <label for="message">Send a message to the announcer (your email will be transmitted)</label>
-          <input name="message" id="message" value="blablablac c cccccccscs">
+          <input class="w-100" name="message" id="message" placeholder="blablablac c cccccccscs">
         </div>
-        <br>
         <div>
-          <button>Send</button>
+          <button class="btn btn-primary my-2 w-25">Send</button>
         </div>
       </form>
       <% if(typeof(title) != 'undefined' && title !== 'Reactivate') { %>
-        <div class="jumbotron bg-light">
+        <div class="jumbotron bg-light mt-4">
           <h2>Deactivate</h2>
           <form action="deactivate" method="POST">
             <div>
               <label for="password">You need the password for the announcement</label>
-              <input name="password" id="password" value="password..." type="password">
+              <input class="w-100" name="password" id="password" value="password..." type="password">
             </div>
-            <br>
             <div>
-              <button>Deactivate</button>
+              <button class="btn btn-danger my-2 w-25">Deactivate</button>
             </div>
           </form>
         </div>
@@ -97,11 +97,10 @@
         <form action="/listings/reactivate" method="POST">
           <div>
             <label for="password">You need the password for the announcement</label>
-            <input name="password" id="password" value="password..." type="password">
+            <input class="w-100" name="password" id="password" value="password..." type="password">
           </div>
-          <br>
           <div>
-            <button>Reactivate</button>
+            <button class="btn btn-success my-2 w-25">Reactivate</button>
           </div>
         </form>
       </div>
