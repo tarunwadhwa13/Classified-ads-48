@@ -6,24 +6,25 @@
 </head>
 
 <body>
+  <%- include('partials/navbar'); %>
   <div class="container">
-
-    <%- include('partials/navbar'); %>
-
-    <h1>
-      <%= title %>
-    </h1>
-
     <section id="docs">
       <header class="row">
-        <div class="col is-vertical-align">
-          <h2 class="is-marginless">Docs</h2>
+        <div class="col-sm-6">
+          <h1 class="display-2 py-2 text-xs-center text-sm-left">
+            <%= title %>
+          </h1>
         </div>
-        <div class="col is-right">
-          <nav class="tabs">
-            <% for(var i=0; i < sections.length; i++) { %>
-              <a href="#<%= sections[i].id %>"><%= sections[i].id %></a>
-            <% } %>
+        <div class="col-sm-6 hidden">
+          <h2>Docs</h2>
+        </div>
+        <div class="col-sm-6 d-flex align-items-center justify-content-stretch">
+          <nav class="navbar navbar-expand navbar-light bg-light mb-0 w-100">
+            <ul class="navbar-nav w-100 justify-content-around">
+              <% for(var i=0; i < sections.length; i++) { %>
+                <li class="nav-item"><a class="nav-link" href="#<%= sections[i].id %>"><%= sections[i].id %></a></li>
+              <% } %>
+            </ul>
           </nav>
         </div>
       </header>

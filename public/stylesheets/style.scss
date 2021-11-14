@@ -17,7 +17,7 @@ label {
 }
 
 code {
-  opacity: 50%;
+  opacity: 75%;
 }
 
 h1 {
@@ -25,6 +25,10 @@ h1 {
 }
 
 h3 {
+  font-family: News Cycle;
+}
+
+h5 {
   font-family: News Cycle;
 }
 
@@ -82,13 +86,13 @@ pre {
   padding: 10px 15px 10px 15px;
   line-height: 20px;
   display: inline-block;
-  margin: 0 50px 20px -360px;
+  margin: 0 10% 20px -50%;
 }
 
 .card {
   border-style: dashed;
   border-width: thin;
-  border-color: #a19f9a;
+  border-color: #a19f9a50;
   background-color: #f5eabf28;
 }
 
@@ -112,6 +116,10 @@ pre {
 
 .pell-content {
   background-color: #309ae641;
+}
+
+.pell-button {
+  color: #333!important;
 }
 
 /* font picker */
