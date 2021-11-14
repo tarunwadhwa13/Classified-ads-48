@@ -6,18 +6,17 @@
 </head>
 
 <body>
-<div id="upper_left" class="svg"></div>
-<div id="upper_right" class="svg"></div>
+<%- include('partials/navbar'); %>
+<div id="upper_left" class="svg mt-4"></div>
+<div id="upper_right" class="svg mt-4"></div>
 <!-- <div id="lower_left"></div> -->
-<div id="lower_right" class="svg"></div>
+<!--<div id="lower_right" class="svg"></div> -->
+
 <div class="container">
-
-    <%- include('partials/navbar'); %>
-
     <div class="head">
-        <div class="headerobjectswrapper">
-            <div class="sexybox"><span style="font-style: italic; font-size: smaller;"><%= intro %></div>
-            <div class="header"><%= title %></div>
+        <div class="headerobjectswrapper my-3" style="position:relative;">
+            <div class="sexybox d-none d-lg-inline" style="min-width:18%;position:absolute;left:62%;top:50%;transform:translateY(-50%)"><span style="font-style: italic; font-size: smaller;"><%= intro %></div>
+            <div><h1 class="display-1 text-uppercase my-2"><%= title %></h1></div>
         </div>
         <div class="subhead">
             <!-- TODO: reference to context: reference of a country -->
@@ -30,56 +29,59 @@
     </div>
     <%- include('partials/geo_search_map'); %>
     <details>
-        <summary data-trans="(search)">Search</summary>
-        <h2 data-trans="(fuzzysearch)">Fuzzy search</h2>
+        <summary class="text-dark" data-trans="(search)">Fuzzy Search</summary>
+        <h2 class="text-dark hidden" data-trans="(fuzzysearch)">Fuzzy search</h2>
         <form action="/listings/gwoogl" method="POST">
             <div class="row">
                 <!-- <label for="title_desc">Title and description</label> -->
-                <div class="col-auto">
-                    <label for="exact" data-trans="(exact?)">Exact ?</label>
-                    <input type="checkbox" class="query" name="exact" id="exact">
+                <div class="w-100 my-auto py-1">
+                    <label class="text-dark" for="exact" data-trans="(exact?)">Exact ?</label>
+                    <input type="checkbox" class="query m-1" name="exact" id="exact">
                 </div>
-                <div class="col-auto">
-                    <input name="title_desc" value="" placeholder="Title or description"
+                <div class="w-100 my-auto py-1 col-lg">
+                    <input class="w-100 p-1" name="title_desc" value="" placeholder="Title or description"
                         data-trans="placeholder=(title|description);html=(title|description)">
                 </div>
-                <div class="col-auto">
-                    <input name="div_q" value="" placeholder="Divisions"
+                <div class="w-100 my-auto py-1 col-lg">
+                    <input class="w-100 p-1" name="div_q" value="" placeholder="Divisions"
                         data-trans="placeholder=(divisions);html=(divisions)">
                 </div>
-                <div class="col-auto">
-                    <label for="since" data-trans="(sincedate)">Since date</label>
-                    <input type="date" name="since" value="2021-04-01" min="2021-04-01">
+                <div class="w-100 my-auto py-1 d-flex justify-content-stretch col-lg">
+                    <label class="text-dark flex-grow-1 my-auto" for="since" data-trans="(sincedate)" style="margin-right:5px;">Since date</label>
+                    <input class="w-auto flex text-muted p-1 flex-grow-1" type="date" name="since" value="2021-04-01" min="2021-04-01">
                 </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary" data-trans="(search)">Search</button>
+                <div class="w-100 my-auto py-1 col-lg">
+                    <button class="btn btn-primary w-100 py-2 sm:w-auto sm:py-1" data-trans="(search)">Search</button>
                 </div>
             </div>
         </form>
     </details>
-    <br>
-    <div class="search">
-        <label for="qsearch">Highlight listings</label>
-        <input type="qsearch" name="qsearch" placeholder="Today listings"
-               data-trans="placeholder=(today-listings);html=(today-listings)" required>
+    <div class="search d-flex py-4">
+        <div class="mx-auto mx-lg-0">
+            <label for="qsearch">Highlight listings</label>
+            <input type="qsearch" name="qsearch" placeholder="Today listings"
+                   data-trans="placeholder=(today-listings);html=(today-listings)" required>
+        </div>
     </div>
-
-    <br>
     <hr>
-    <h2>Listings</h2>
+    <h2 class="pb-2">Listings</h2>
     <div class="row">
         <% for (var i = 0; listings.length> 0 && i < listings.length && i < 10 ; i++) { %>
-        <div class="col-sm <%= listings[i].section %>" id="<%= listings[i]._id %>">
-          <div class="card">
-            <h5 class="card-title" dir="auto"><a href='/listings/id/<%= listings[i]._id %>/'><%= listings[i].title.charAt(0).toUpperCase() + listings[i].title.slice(1) %></a></h5> 
-            <p class="card-text" dir="auto"><%- listings[i].desc.slice(0,300) %> ...</p>
-            <div class="card-body">
-              <code><%= new Date(parseInt(listings[i]._id.toString().substring(0, 8), 16) * 1000).toISOString().slice(0,10) %></code>
-              <% for (var j=0; listings[i].tags && listings[i].tags.length > 0 && j < listings[i].tags.length ; j++) { %>
-                <a href="/tag/<%- listings[i].tags[j] %>"><span class="badge bg-secondary"><%- listings[i].tags[j] %></span></a>
-              <% } %>
-            </div>
-          </div>
+        <div class="col-sm col-md-6 col-xl-4">
+            <div class="h-100 pb-3 <%= listings[i].section %>" id="<%= listings[i]._id %>">
+                <div class="card mb-3 h-100">
+                    <div class="card-body d-flex flex-wrap align-content-between">
+                        <h5 class="card-title" dir="auto"><a href='/listings/id/<%= listings[i]._id %>/'><%= listings[i].title.charAt(0).toUpperCase() + listings[i].title.slice(1) %></a></h5> 
+                        <p class="card-text w-100 text-truncate mb-1" dir="auto"><%- listings[i].desc %></p>
+                        <code class="w-100" style="font-size:0.75rem"><%= new Date(parseInt(listings[i]._id.toString().substring(0, 8), 16) * 1000).toISOString().slice(0,10) %></code>
+                        <div class="w-100">
+                            <% for (var j=0; listings[i].tags && listings[i].tags.length > 0 && j < listings[i].tags.length ; j++) { %>
+                                <a href="/tag/<%- listings[i].tags[j] %>"><span class="badge bg-secondary"><%- listings[i].tags[j] %></span></a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                </div>      
         </div>
         <% } %>
     </div>

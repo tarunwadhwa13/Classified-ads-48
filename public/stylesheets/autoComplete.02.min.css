@@ -7,7 +7,8 @@
 
 .autoComplete_wrapper {
     display: inline-block;
-    position: relative
+    position: relative;
+    width: 100%;
 }
 
 .autoComplete_wrapper>input {
