@@ -14,6 +14,7 @@
 </head>
 
 <body>
+
   <!-- TODO: reactive style if title == 'reactivate' -->
   <div id="upper_left" class="svg my-3"></div>
   <div id="upper_right" class="svg my-3"></div>
@@ -75,6 +76,13 @@
           <button class="btn btn-primary my-2 w-25">Send</button>
         </div>
       </form>
+      <% for (var i = 0; messages.length> 0 && i < messages.length && i < 10 ; i++) { %>
+        <div class="row">
+          <p>
+            <%= JSON.stringify(messages[i]) %>
+          </p>
+        </div>
+        <% } %>
       <% if(typeof(title) != 'undefined' && title !== 'Reactivate') { %>
         <div class="jumbotron bg-light mt-4">
           <h2>Deactivate</h2>
