@@ -400,3 +400,54 @@ $bootstrap_mapping: (
   //   margin-top: 1rem;
   // }
 }
+
+ /* Chat containers */
+ .chat {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1a4;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Darker chat container */
+.darker {
+  border-color: rgb(126, 125, 125);
+  background-color: rgba(126, 125, 125, 0.692);
+}
+
+/* Clear floats */
+.chat::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Style images */
+.chat img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+/* Style the right image */
+.chat img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+  float: right;
+}
+
+/* Style time text */
+.time-left {
+  float: left;
+} 
