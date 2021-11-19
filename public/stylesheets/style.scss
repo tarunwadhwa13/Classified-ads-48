@@ -411,12 +411,20 @@ $bootstrap_mapping: (
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+  cursor: pointer;
 }
 
 /* Darker chat container */
-.darker {
+.chat-darker {
   border-color: rgb(126, 125, 125);
   background-color: rgba(126, 125, 125, 0.692);
+}
+
+/* Darker chat container */
+.chat-reply {
+  border-color: rgb(126, 125, 125);
+  background-color: rgba(51, 122, 45, 0.692);
+  width: 90%;
 }
 
 /* Clear floats */
@@ -443,11 +451,11 @@ $bootstrap_mapping: (
 }
 
 /* Style time text */
-.time-right {
+.chat-time-right {
   float: right;
 }
 
 /* Style time text */
-.time-left {
+.chat-time-left {
   float: left;
 } 
