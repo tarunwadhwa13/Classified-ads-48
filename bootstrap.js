@@ -406,6 +406,7 @@ ops.wordsMapReduce = function wordsMapReduce (db) {
   db.collection('listing').mapReduce(
     function () {
       const document = this
+      // TODO: extend stopwords (multiple languages as well)
       const stopwords = ['the', 'this', 'and', 'or']
       if (document.d || !document.a) {
         return
