@@ -69,3 +69,6 @@ creds/
 /client/dist
 /app_blog/build
 /app_blog/node_modules
+/cypress.env.json
+/cypress/screenshots
+/cypress/videos

@@ -21,7 +21,10 @@ const logger = winston.createLogger({
 })
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format: winston.format.simple()
+    format: winston.format.combine(
+      winston.format.colorize({ all: true }),
+      winston.format.simple()
+    )
   }))
 }
 
@@ -36,13 +39,15 @@ try {
   })
   mailHogTransporter.verify(function (error, success) {
     if (error) {
-      logger.log({ level: 'error', message: error.message })
+      logger.log({ level: 'error', message: 'Refusing to start because of ' + error.message })
+      process.exit()
     } else {
       logger.log({ level: 'info', message: 'MailHog server ready' })
     }
   })
 } catch (error) {
-  logger.log({ level: 'error', message: error.message })
+  logger.log({ level: 'error', message: 'Refusing to start because of ' + error.message })
+  process.exit()
 }
 
 MongoClient.prototype.isConnected = function (options) {
