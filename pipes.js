@@ -78,6 +78,7 @@ const getDB = async () => {
       resolve(db)
     } else {
       MongoClient.connect(url, async function (err, client) {
+        if(!client) reject(new Error(`Check if MongoDB server is up`))
         logger.log({
           level: 'info',
           message: `Connected successfully to server url: ${url.split('@')[0]},

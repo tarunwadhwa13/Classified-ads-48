@@ -273,9 +273,10 @@ ops.checkEnvironmentData = async function checkEnvironmentData (url) {
     // if (process.env.NODE_ENV !== 'local') {
     //   resolve();
     // }
-    MongoClient.connect(url, function (err, client) {
+    MongoClient.connect(url, async function (err, client) {
     // Use the admin database for the operation
-      const adminDb = client.db('local').admin()
+      if(!client) reject(new Error(`Check if MongoDB server is up`))
+      let adminDb = await client.db('local').admin() 
       // List all the available databases
       adminDb.listDatabases(async function (err, dbs) {
         const databases = dbs.databases.map((n) => n.name)

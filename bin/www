@@ -123,6 +123,6 @@ gracefulShutdown(server, {
 
 process.on('uncaughtException', function (err) {
   // handle the error safely
-  logger.log({ level: 'error', message: err })
+  logger.log({ level: 'error', message: `uncaughtException ${err}` })
   process.exit(1)
 })

@@ -77,14 +77,15 @@ app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')))
 // Process generic parameters
 const processParams = function (req, res, next) {
   res.locals.isAuthenticated = req.oidc.isAuthenticated()
-
+  // TODO: Should be executed in every request ?
   if (req.oidc.isAuthenticated()) {
     res.locals.user = req.oidc.user
   } else {
-    logger.log({ level: 'info', message: 'login:: user is not authenticated' })
+    // logger.log({ level: 'info', message: 'login:: user is not authenticated' })
   }
 
   // 1: Trimmer
+  // TODO: Hopefully this is safe ? not changing other middleware that might act on body
   req.body = _.object(_.map(req.body, function (value, key) {
     if (value && value.length) {
       return [key, value.trim()]
