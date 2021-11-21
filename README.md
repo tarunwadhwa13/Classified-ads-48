@@ -52,7 +52,7 @@ The purpose of this project is to let forkers implement new sections and offer t
 
 ## Database
 
-MongoDB using the official MongoDB Node Driver
+MongoDB using the official MongoDB Node Driver. **Data model is really simplistic. I only used one table for Listings (or collection in NoSQL jargon) (added words and users with no relations)**
 
 ## Client data 
 
@@ -61,9 +61,6 @@ Mostly Geodata or data to derive tags from are hosted temporarily [here](https:/
 ## Style
 
 It is inteded to be clean, fast and paper/newspaper looking style and layout.
-
-
-**Data model is really simplistic. I only used one table (or collection in NoSQL jargon).**
 
 ## Routes 
 
@@ -103,17 +100,18 @@ There are also other routes that client side JS code fetches:
   - /client/dist  (empty folder)  
   - /client/.env (check bellow **)
   - Check [tree file](tree.txt)
-- Create MongoDB databases: `listings_db_dev` and `listings_db` with both collections `listing` and `words`
+- Create MongoDB databases: `listings_db_dev` and `listings_db` with three collections `listing`, `user` and `words`
 - `cd client` then `npm install`
+- run a [MailHog instance](https://github.com/mailhog/MailHog/releases)
 - Go back to root folder to `npm install` then `npm run prestart`
-- `npm start` (or you can install pm2 globally and run `pm2 start`)
+- `npm run dev` for development env or `npm start` (or you can install pm2 globally and run `pm2 start`)
 - When you get your hands on, you can change map data, delivered messages and so on. 
 
 ### Environment variables
 
 **.env**  
 ```
-NODE_ENV={local/development/production}
+NODE_ENV={monkey chaos/local/development/production (use 'local')}
 HONEYPOT_KEY={get a free key from https://www.projecthoneypot.org/}
 PASS={password3}
 PASS2={password4}
@@ -123,19 +121,20 @@ EMAIL_FROM={email2}
 MONGODB_URI={you can keep empty for 'local' env}
 GCLOUD_STORAGE_BUCKET={Google-cloud-storage bucket name}
 CREDS_PATH=./creds/{{Google-cloud-storage credentials file-name}}
-REDIS_PORT={REDIS_PORT || 6379}
-REDIS_HOST={REDIS_HOST || localhost}
 AUTH0_CLIENT_ID={AUTH0_CLIENT_ID}
 AUTH0_DOMAIN=https://{AUTH0_DOMAIN}
 AUTH0_CLIENT_SECRET={AUTH0_CLIENT_SECRET}
 SESSION_SECRET={secure random long string}
 AUTH0_CALLBACK_URL={Callback URL || http://localhost:3000/callback}
 AUTH0_BASEURL={Localhost URL || http://localhost:3000}
+AUTH0_TEST_EMAIL={leave empty}
+AUTH0_TEST_PASSWD={leave empty}
 ```
+`AUTH0_TEST_EMAIL` and `AUTH0_TEST_PASSWD` are only required for Cypress testing. Check [this tutorial](https://auth0.com/blog/end-to-end-testing-with-cypress-and-auth0/).
 
 **client/.env**  
 ```
-NODE_ENV={local/development/production}
+NODE_ENV={local/development/production (use 'development')}
 LATITUDE={Latitude that suits chosen geolocation (center?)}
 LONGITUDE={longitude that suits chosen geolocation (center?)}
 BORDERS_FILE_URL={link to borders json (ex: https://raw.githubusercontent.com/bacloud14/listings-data/main/data/geo/borders-algeria-v0.json)}
@@ -150,22 +149,13 @@ I want to build an open annoucements platform in *Algeria* (Lack of an online se
 
 ## Captures
 
-- Index page shows fresh listings
+- Index and section page on large screens
 
-![Index page](GITHUB/docs/Capture_index.PNG)
+![large screens](GITHUB/docs/141694874-85d0b525-278b-45ff-b484-42fd95236207.gif)
 
-- Section page shows listings of type donations, skills or blogs
+- Index and section page on small screen
 
-![Section page](GITHUB/docs/Capture_section.PNG)
-
-- Add a listing, depending on secrtion type, show or hide map
-
-![Add a listing](GITHUB/docs/Capture_add.PNG)
-
-- Get a listing
-
-![Get a listing](GITHUB/docs/Capture_get.PNG)
-
+![small screen](GITHUB/docs/141694895-d49f5d49-feff-4463-a787-3933bace3315.gif)
 
 ## Contribution
 
