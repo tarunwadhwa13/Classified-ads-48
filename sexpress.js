@@ -98,9 +98,7 @@ const processParams = function (req, res, next) {
   // 2: Pagination
   // Add pagination constants based on API, device, browser, etc.
   // No pagination for search pages
-  if (req.url.indexOf('geolocation') >= 0 ||
-    req.url.indexOf('gwoogl') >= 0 ||
-    req.url.indexOf('contact') >= 0) {
+  if (req.method ==='POST') {
     return next()
   }
   const perPage = 9
