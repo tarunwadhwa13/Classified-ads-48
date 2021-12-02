@@ -50,16 +50,16 @@
             <!-- <label for="description">What description do you want to say?</label> -->
             <input name="desc" class="add" id="description" value="" type="hidden">
           </div>
+          <input type="hidden" type="number" id="lat" name="lat" > 
+          <input type="hidden" type="number" id="lng" name="lng" > 
+          <!-- Division -->
+          <input type="hidden" id="div" name="div"> 
+          <input type="hidden" name="section" value='donations'>
           <div class="form-group py-2">
             <label class="text-dark"><b>Upload an image of the item: </b></label>
             <input class="w-100 py-1 text-dark" type="file"  value='image' name='avatar' accept="image/*" onchange="loadFile(event)">
             <img id="output" width="200" />
           </div>
-          <input type="hidden" type="number" id="lat" name="lat" > 
-          <input type="hidden" type="number" id="lng" name="lng" > 
-          <!-- Division -->
-          <input type="hidden" id="div" name="div"> 
-          <input type="hidden" name="section" value='donations'> 
           <div class="w-100">
             <button class="btn btn-primary w-100 py-2 sm:w-auto sm:py-1">Add listing</button>
           </div>

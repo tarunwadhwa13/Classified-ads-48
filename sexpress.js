@@ -1,6 +1,8 @@
 const dns = require('dns')
 const path = require('path')
 const express = require('express')
+// const cookieParser = require("cookie-parser");
+const expressSession = require('express-session')
 const { auth } = require('express-openid-connect')
 const flash = require('connect-flash')
 const compression = require('compression')
@@ -46,6 +48,13 @@ const authConfig = {
   issuerBaseURL: process.env.AUTH0_DOMAIN
 }
 
+const session = {
+  secret: process.env.SESSION_SECRET,
+  cookie: {},
+  resave: false,
+  saveUninitialized: false
+};
+
 const app = express()
 
 app.use(
@@ -72,6 +81,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 // app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(expressSession(session));
 app.use('/so-c', express.static(path.join(__dirname, 'app_so-cards')))
 app.use('/blog/', express.static(path.join(__dirname, 'app_blog/build')))
 // const customFilter = new Filter({placeHolder: 'x'});
