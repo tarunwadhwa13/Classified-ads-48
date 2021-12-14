@@ -1,5 +1,7 @@
 import Tagify from '@yaireo/tagify'
 import { transformTag } from './transform-tag'
+// consts.js' is not under 'rootDir' but whatever
+import { TAG_SIZE } from '../../../../../consts.js'
 /**
  * @param tagified
  * @param input
@@ -11,7 +13,8 @@ export function newTagify (tagified, input, tags, maxTags = 3) {
     tagified.destroy()
   }
   tagified = new Tagify(input, {
-    pattern: /^.{0,20}$/,
+    // limit text size to 35
+    pattern: new RegExp(`^.{0,${TAG_SIZE}}$`),
     delimiters: ',| ',
     keepInvalidTags: false,
     editTags: {

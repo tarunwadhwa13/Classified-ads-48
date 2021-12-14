@@ -24,6 +24,7 @@ const consts = {
       delayMs: 500 // begin adding 500ms of delay per request above 100:
       // request # 101 is delayed by  500ms
     }
-  }
+  },
+  TAG_SIZE : 35
 }
 module.exports = consts
