@@ -14,6 +14,7 @@ const slowDown = require('express-slow-down')
 const rateLimit = require('express-rate-limit')
 const _ = require('underscore')
 const maybe = require('maybe-middleware')
+const monitor = require('express-status-monitor')
 
 const { PING_LIMITER } = require('./consts.js')
 const { logger } = require('./pipes.js')
@@ -56,7 +57,8 @@ const session = {
 };
 
 const app = express()
-
+// Will mount on /status
+app.use(monitor())
 app.use(
   auth(authConfig),
   helmet({ contentSecurityPolicy: false }),

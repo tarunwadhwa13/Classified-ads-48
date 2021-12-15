@@ -39,6 +39,7 @@
     "express-rate-limit": "^5.2.6",
     "express-session": "^1.17.1",
     "express-slow-down": "^1.4.0",
+    "express-status-monitor": "^1.3.3",
     "formidable": "^2.0.1",
     "freemail": "^1.7.0",
     "fuzzyset": "^1.0.7",
