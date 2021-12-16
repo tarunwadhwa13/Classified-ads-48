@@ -25,12 +25,20 @@
       <p>
         Approve carefully 
       </p>
-      <zing-grid caption="Unapproved Listings" pager page-size="10" page-size-options="10,20,100" layout-controls=true editor editor-controls>
-      <zg-data >
-        <zg-param name="src" value="/admin/"></zg-param>
-        <zg-param name="idKey" value="_id"></zg-param>
-      </zg-data>
-    </zing-grid>
+      <zing-grid caption="Unapproved Listings" layout="card" layout-controls=true pager page-size="10" page-size-options="10,20,100" editor editor-controls>
+        <zg-data >
+          <zg-param name="src" value="/admin/"></zg-param>
+          <zg-param name="idKey" value="_id"></zg-param>
+        </zg-data>
+        <zg-colgroup>
+          <zg-column index="title" header="Title"></zg-column>
+          <zg-column index="tags" header="Tags"></zg-column>
+          <zg-column index="desc" header="Description"></zg-column>
+          <zg-column index="section" header="Section"></zg-column>
+          <zg-column index="usr" header="User"></zg-column>
+          <zg-column index="img" type="image" header="Image"></zg-column>
+        </zg-colgroup>
+      </zing-grid>
       <!-- <zing-grid caption="Unapproved Listings" pager page-size="10" page-size-options="10,20,100" layout-controls=true src="/admin/" editor editor-controls></zing-grid> -->
     </main>
 
