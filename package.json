@@ -79,6 +79,7 @@
     "underscore": "^1.12.1",
     "wink-nlp-utils": "^2.0.7",
     "winston": "^3.3.3",
+    "winston-dashboard": "^1.0.12",
     "zlib": "^1.0.5"
   },
   "devDependencies": {

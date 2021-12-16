@@ -3,6 +3,8 @@ const dotenv = require('dotenv')
 const {ops: bootstrap} = require('./bootstrap.js')
 const { logger, mongoClient, getDB } = require('./pipes.js')
 const sexpress = require('./sexpress.js')
+const winstonServer = require('winston-dashboard')
+const path = require('path')
 
 bootstrap.checkEnvironmentVariables()
 
@@ -45,6 +47,20 @@ const prepareData = () => {
     })
   })
 }
+
+
+
+// Instantiate the server
+winstonServer({
+  //Root path of the logs (used to not show the full path on the log selector)
+  path: path.join(__dirname, '/logs'),
+  //Glob to search for logs, make sure you start with a '/'
+  logFiles: '/*.log',
+  // Optional custom port, defaults to 8000,
+  port: 8000,
+  // 'creationTime' | 'modifiedTime', if none is provided: sort by alphabetical order
+  orderBy: 'timestamp'
+});
 
 /**
  * NodeJS go and attach the Express app if you want;
