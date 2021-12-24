@@ -3,7 +3,7 @@ all: require prepare install message
 require:
 	@echo "===> Checking if necessary programs are available for starting the application..."
 	@npm --version >/dev/null 2>&1 || (echo "ERROR: npm version check failed. npm is required. Please install npm & node"; exit 1)
-	@webpack --version >/dev/null 2>&1 || (echo "ERROR: webpack version check failed. Please ensure webpack is installed globally"; exit 1)
+	@webpack --version >/dev/null 2>&1 || (echo "ERROR: webpack version check failed. Please ensure webpack & webpack-cli is installed globally"; exit 1)
 
 prepare:
 	@echo "===> Preparing your directory for application"
