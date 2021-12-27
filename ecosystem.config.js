@@ -4,13 +4,10 @@ const path = require('path')
 module.exports = {
   apps: [{
     script: path.join(__dirname, '/bin/www'),
-    error_file: path.join(__dirname, '/logs/err.log'),
-    out_file: path.join(__dirname, '/logs/out.log'),
-    log_file: path.join(__dirname, '/logs/combined.log'),
-    watch: ['/lib/helper_data.js',
-      '/lib/helper_ops.js',
-      '/lib/bigToes.js',
-      '/lib/mongo_ops.js'].map((p) => path.join(__dirname, p)),
+    // error_file: path.join(__dirname, '/logs/err.log'),
+    // out_file: path.join(__dirname, '/logs/out.log'),
+    // log_file: path.join(__dirname, '/logs/combined.log'),
+    watch: ['lib'],
     exec_mode: 'fork',
     detached: true,
     listen_timeout: 3000,

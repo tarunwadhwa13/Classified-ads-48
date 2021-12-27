@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('partials/head'); %>
+</head>
+
+<body lang="en">
+  <div id="upper_left" class="svg mt-4"></div>
+  <div id="upper_right" class="svg mt-4"></div>
+  <!-- <div id="lower_left"></div> -->
+  <!-- <div id="lower_right" class="svg"></div>-->
+  <%- include('partials/navbar'); %>
+  <div class="container">
+    <div class="jumbotron py-3">
+      <h1 class="display-4 text-center sm:text-left anima" id="app"></h1>
+      <p class="text-center sm:text-left servervar">Welcome to <%= title %></p>
+    </div>
+    <ul class="list-group">
+      <% 
+        let state, lastEvent
+        const sectionStyle = ['list-group-item-primary', 'list-group-item-secondary', 'list-group-item-success']
+        const symbolIterator = sectionStyle[Symbol.iterator]();
+        function style(newEvent) {
+          if(!state || newEvent !== lastEvent) {
+            lastEvent = newEvent
+            state = symbolIterator.next().value
+          }
+          return state
+        }
+      %> 
+      <% for (var i=0; tags.length> 0 && i < tags.length && i < 100 ; i++) { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center <%- style(tags[i]._id.section) %>">
+          <a href="/tag/<%- tags[i]._id.tags %>"><span class="badge bg-secondary"><%- tags[i]._id.tags %></span></a>
+          This section <%= tags[i]._id.section %>
+          <span class="badge bg-primary rounded-pill"> <%= tags[i].count %></span>
+        </li>
+      <% } %>
+    </ul>
+    <%- include('partials/footer'); %>
+  </div>
+  
+</body>
+<%- include('partials/afterbody'); %>
+
+</html>
